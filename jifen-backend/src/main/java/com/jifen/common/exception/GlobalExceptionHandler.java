@@ -5,25 +5,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(BusinessException.class)
-    @ResponseStatus(HttpStatus.OK)
-    public Result<Void> handleBusinessException(BusinessException e) {
-        return Result.error(e.getCode(), e.getMessage());
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Result<Void> handleMaxUploadSizeExceeded(MaxUploadSizeExceededException e) {
+        return Result.error(400, "文件大小不能超过5MB");
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    @ResponseStatus(HttpStatus.OK)
-    public Result<Void> handleIllegalArgument(IllegalArgumentException e) {
-        return Result.error(400, e.getMessage());
+    @ExceptionHandler(BusinessException.class)
+    public Result<Void> handleBusinessException(BusinessException e) {
+        return Result.error(e.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Result<Void> handleException(Exception e) {
-        return Result.error(500, "系统异常: " + e.getMessage());
+        return Result.error("服务器内部错误: " + e.getMessage());
     }
 }

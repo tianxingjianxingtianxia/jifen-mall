@@ -21,7 +21,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String[] PUBLIC_PATHS = {
         "/auth/login", "/auth/register",
         "/auth/admin/login",
+        "/uploads/",
     };
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        String ctxPath = request.getContextPath();
+        if (ctxPath != null && !ctxPath.isEmpty()) {
+            path = path.substring(ctxPath.length());
+        }
+        // Static upload files are public
+        return path.startsWith("/uploads/");
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
