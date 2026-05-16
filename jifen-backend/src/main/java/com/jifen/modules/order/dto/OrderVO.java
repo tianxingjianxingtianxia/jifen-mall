@@ -8,6 +8,7 @@ public class OrderVO {
     private Long id;
     private String orderNo;
     private Long userId;
+    private String userName;
     private Long productId;
     private String productName;
     private String productImage;

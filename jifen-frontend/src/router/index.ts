@@ -48,6 +48,12 @@ const routes: RouteRecordRaw[] = [
     component: () => import('../views/OrderDetail.vue'),
     meta: { requiresAuth: true }
   },
+  {
+    path: '/points-records',
+    name: 'PointsRecords',
+    component: () => import('../views/PointsRecords.vue'),
+    meta: { requiresAuth: true }
+  },
   // 管理后台路由
   {
     path: '/admin/login',

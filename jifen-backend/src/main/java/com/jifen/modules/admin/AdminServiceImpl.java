@@ -146,6 +146,22 @@ public class AdminServiceImpl implements AdminService {
         IPage<Order> page = orderMapper.selectPage(
                 new Page<>(request.getPageNum(), request.getPageSize()), wrapper);
         IPage<OrderVO> voPage = page.convert(orderService::toOrderVO);
+
+        // 填充用户名称
+        if (voPage.getRecords() != null && !voPage.getRecords().isEmpty()) {
+            List<Long> userIds = voPage.getRecords().stream()
+                    .map(OrderVO::getUserId)
+                    .collect(Collectors.toList());
+            if (!userIds.isEmpty()) {
+                List<User> users = userMapper.selectBatchIds(userIds);
+                Map<Long, String> userMap = users.stream()
+                        .collect(Collectors.toMap(User::getId, User::getUsername));
+                for (OrderVO vo : voPage.getRecords()) {
+                    vo.setUserName(userMap.getOrDefault(vo.getUserId(), ""));
+                }
+            }
+        }
+
         return PageResult.of(voPage);
     }
 

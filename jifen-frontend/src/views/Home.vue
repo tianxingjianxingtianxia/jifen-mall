@@ -4,6 +4,11 @@
     <header class="header">
       <div class="header-inner">
         <h1 class="logo">积分商城</h1>
+        <div class="header-nav">
+          <router-link to="/home" class="nav-link">首页</router-link>
+          <router-link to="/orders" class="nav-link">我的订单</router-link>
+          <router-link to="/points-records" class="nav-link">积分明细</router-link>
+        </div>
         <div class="header-right">
           <span class="user-info">
             <el-icon><User /></el-icon>
@@ -177,7 +182,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onActivated } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import {
@@ -213,6 +218,12 @@ onMounted(async () => {
     checkTodaySign(),
     loadBalance()
   ])
+})
+
+// 从其他页面返回时刷新积分（如兑换后回首页）
+onActivated(async () => {
+  await userStore.fetchUserInfo()
+  await loadBalance()
 })
 
 async function checkTodaySign() {
@@ -325,6 +336,27 @@ function handleLogout() {
   align-items: center;
   gap: 4px;
   color: #606266;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav-link {
+  color: #606266;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.nav-link:hover {
+  color: #409eff;
+}
+
+.nav-link.router-link-active {
+  color: #409eff;
+  font-weight: 600;
 }
 
 /* 积分卡片 */

@@ -124,7 +124,7 @@
           />
         </el-form-item>
         <el-form-item label="设为默认">
-          <el-switch v-model="form.isDefault" />
+          <el-switch v-model="form.isDefault" :active-value="1" :inactive-value="0" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -171,7 +171,7 @@ const form = reactive<AddressInput>({
   city: '',
   district: '',
   detailAddress: '',
-  isDefault: false
+  isDefault: 0
 })
 
 const rules: FormRules = {
@@ -208,7 +208,7 @@ function resetForm() {
   form.city = ''
   form.district = ''
   form.detailAddress = ''
-  form.isDefault = false
+  form.isDefault = 0
 }
 
 function openAddDialog() {

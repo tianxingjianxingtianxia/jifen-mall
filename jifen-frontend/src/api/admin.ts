@@ -17,6 +17,7 @@ export interface ProductItem {
 export interface OrderItem {
   id: number
   orderNo: string
+  userName: string
   productName: string
   pointsSpent: number
   receiverName: string

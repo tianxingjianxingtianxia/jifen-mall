@@ -10,8 +10,10 @@ export interface PointsRecord {
   id: number
   userId: number
   points: number
-  type: string
-  description: string
+  /** 1=获得 2=消耗 */
+  type: number
+  source: string
+  remark: string
   createTime: string
 }
 

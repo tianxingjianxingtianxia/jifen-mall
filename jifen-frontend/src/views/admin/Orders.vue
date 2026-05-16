@@ -8,10 +8,10 @@
     <el-card shadow="never" class="filter-card">
       <el-tabs v-model="activeTab" @tab-change="onTabChange">
         <el-tab-pane label="全部" name="all" />
-        <el-tab-pane label="待发货" name="1" />
-        <el-tab-pane label="已发货" name="2" />
-        <el-tab-pane label="已完成" name="3" />
-        <el-tab-pane label="已取消" name="4" />
+        <el-tab-pane label="待发货" name="0" />
+        <el-tab-pane label="已发货" name="1" />
+        <el-tab-pane label="已完成" name="2" />
+        <el-tab-pane label="已取消" name="3" />
       </el-tabs>
 
       <el-form :inline="true" :model="searchForm" class="search-form">
@@ -29,6 +29,7 @@
     <el-card shadow="never">
       <el-table :data="orders" v-loading="loading" stripe style="width: 100%">
         <el-table-column prop="orderNo" label="订单号" width="200" />
+        <el-table-column prop="userName" label="用户" width="120" />
         <el-table-column prop="productName" label="商品" min-width="160" />
         <el-table-column prop="pointsSpent" label="消耗积分" width="100" />
         <el-table-column prop="receiverName" label="收货人" width="120" />
@@ -42,7 +43,7 @@
         <el-table-column label="操作" width="120" fixed="right">
           <template #default="{ row }">
             <el-button
-              v-if="row.status === 1"
+              v-if="row.status === 0"
               size="small"
               type="primary"
               @click="openShipDialog(row)"
@@ -120,10 +121,10 @@ const shipRules: FormRules = {
 
 function statusType(status: number): string {
   switch (status) {
-    case 1: return 'warning'
-    case 2: return 'primary'
-    case 3: return 'success'
-    case 4: return 'info'
+    case 0: return 'warning'
+    case 1: return 'primary'
+    case 2: return 'success'
+    case 3: return 'info'
     default: return 'info'
   }
 }

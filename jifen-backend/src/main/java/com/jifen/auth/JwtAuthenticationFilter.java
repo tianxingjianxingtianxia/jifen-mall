@@ -29,6 +29,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
+        // CORS preflight - return 200 with CORS headers
+        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, X-Requested-With, Accept");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Max-Age", "3600");
+
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            System.out.println("[JwtFilter] OPTIONS preflight - returning 200 with CORS");
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
+
         String path = request.getRequestURI();
         // Strip context-path for matching
         String ctxPath = request.getContextPath();
