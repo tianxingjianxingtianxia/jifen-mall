@@ -90,11 +90,29 @@
 
                 <el-divider />
 
+                <div class="detail-address">
+                  <h4 class="section-title">收货地址</h4>
+                  <el-select v-model="selectedAddressId" placeholder="选择收货地址" style="width: 100%">
+                    <el-option
+                      v-for="addr in addresses"
+                      :key="addr.id"
+                      :label="addr.receiverName + ' ' + addr.receiverPhone + ' ' + addr.province + addr.city + addr.district + addr.detailAddress"
+                      :value="addr.id"
+                    />
+                  </el-select>
+                  <el-button text type="primary" @click="router.push('/addresses')" style="margin-top: 8px">
+                    + 新增地址
+                  </el-button>
+                </div>
+
+                <el-divider />
+
                 <div class="detail-action">
                   <el-button
                     type="warning"
                     size="large"
-                    :disabled="product.stockStatus === 'out_of_stock'"
+                    :disabled="product.stockStatus === 'out_of_stock' || exchangeLoading"
+                    :loading="exchangeLoading"
                     :icon="ShoppingCart"
                     @click="handleExchange"
                   >
@@ -127,14 +145,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import {
   ArrowLeft, User, Coin, Picture, ShoppingCart
 } from '@element-plus/icons-vue'
 import { useUserStore } from '../stores/user'
 import { getProductDetail, type ProductDetail } from '../api/products'
+import { createOrder } from '../api/orders'
+import { getAddresses, type Address } from '../api/addresses'
 
 const route = useRoute()
 const router = useRouter()
@@ -142,6 +162,10 @@ const userStore = useUserStore()
 
 const product = ref<ProductDetail | null>(null)
 const loading = ref(false)
+const exchangeLoading = ref(false)
+const addresses = ref<Address[]>([])
+const selectedAddressId = ref<number | null>(null)
+const showAddressDialog = ref(false)
 
 onMounted(async () => {
   const id = Number(route.params.id)
@@ -151,7 +175,20 @@ onMounted(async () => {
     return
   }
   await loadProduct(id)
+  await loadAddresses()
 })
+
+async function loadAddresses() {
+  try {
+    addresses.value = await getAddresses()
+    const defaultAddr = addresses.value.find(a => a.isDefault === 1 || a.isDefault === true)
+    if (defaultAddr) {
+      selectedAddressId.value = defaultAddr.id
+    } else if (addresses.value.length > 0) {
+      selectedAddressId.value = addresses.value[0].id
+    }
+  } catch {}
+}
 
 async function loadProduct(id: number) {
   loading.value = true
@@ -168,13 +205,44 @@ function goBack() {
   router.back()
 }
 
-function handleExchange() {
+async function handleExchange() {
   if (!product.value) return
   if (userStore.points < product.value.pointsRequired) {
     ElMessage.warning('积分不足，无法兑换')
     return
   }
-  ElMessage.info('兑换功能开发中，敬请期待')
+  if (addresses.value.length === 0) {
+    ElMessage.warning('请先添加收货地址')
+    router.push('/addresses')
+    return
+  }
+  if (!selectedAddressId.value) {
+    ElMessage.warning('请选择收货地址')
+    return
+  }
+  try {
+    await ElMessageBox.confirm(
+      '确认兑换 <b>' + product.value.name + '</b>？<br/>消耗积分：<b style="color:#e6a23c">' + product.value.pointsRequired + '</b>',
+      '兑换确认',
+      { confirmButtonText: '确认兑换', cancelButtonText: '取消', dangerouslyUseHTMLString: true, type: 'warning' }
+    )
+  } catch {
+    return // 用户取消
+  }
+  exchangeLoading.value = true
+  try {
+    const order = await createOrder({
+      productId: product.value.id,
+      addressId: selectedAddressId.value
+    })
+    ElMessage.success('兑换成功！')
+    userStore.updatePoints(userStore.points - product.value.pointsRequired)
+    router.push('/order/' + order.id)
+  } catch (e: any) {
+    ElMessage.error(e.message || '兑换失败')
+  } finally {
+    exchangeLoading.value = false
+  }
 }
 
 function handleLogout() {
