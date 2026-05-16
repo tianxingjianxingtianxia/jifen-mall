@@ -101,17 +101,54 @@
         <el-row :gutter="10">
           <el-col :span="8">
             <el-form-item label="省" prop="province">
-              <el-input v-model="form.province" placeholder="省" />
+              <el-select
+                v-model="form.province"
+                placeholder="请选择省份"
+                style="width: 100%"
+                @change="onProvinceChange"
+              >
+                <el-option
+                  v-for="p in provinces"
+                  :key="p.value"
+                  :label="p.label"
+                  :value="p.value"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="市" prop="city">
-              <el-input v-model="form.city" placeholder="市" />
+              <el-select
+                v-model="form.city"
+                placeholder="请选择城市"
+                style="width: 100%"
+                :disabled="!form.province"
+                @change="onCityChange"
+              >
+                <el-option
+                  v-for="c in cities"
+                  :key="c.value"
+                  :label="c.label"
+                  :value="c.value"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="区" prop="district">
-              <el-input v-model="form.district" placeholder="区" />
+              <el-select
+                v-model="form.district"
+                placeholder="请选择区县"
+                style="width: 100%"
+                :disabled="!form.city"
+              >
+                <el-option
+                  v-for="d in districts"
+                  :key="d.value"
+                  :label="d.label"
+                  :value="d.value"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -138,7 +175,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import { ArrowLeft, Plus } from '@element-plus/icons-vue'
@@ -152,6 +189,7 @@ import {
   type Address,
   type AddressInput
 } from '../api/addresses'
+import { getProvinces, getCities, getDistricts } from '../utils/area'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -180,10 +218,32 @@ const rules: FormRules = {
     { required: true, message: '请输入手机号', trigger: 'blur' },
     { pattern: /^1[3-9]\d{9}$/, message: '请输入有效的手机号', trigger: 'blur' }
   ],
-  province: [{ required: true, message: '请输入省份', trigger: 'blur' }],
-  city: [{ required: true, message: '请输入城市', trigger: 'blur' }],
-  district: [{ required: true, message: '请输入区县', trigger: 'blur' }],
+  province: [{ required: true, message: '请选择省份', trigger: 'change' }],
+  city: [{ required: true, message: '请选择城市', trigger: 'change' }],
+  district: [{ required: true, message: '请选择区县', trigger: 'change' }],
   detailAddress: [{ required: true, message: '请输入详细地址', trigger: 'blur' }]
+}
+
+// 省市区联动数据
+const provinces = computed(() => getProvinces())
+
+const cities = computed(() => {
+  if (!form.province) return []
+  return getCities(form.province)
+})
+
+const districts = computed(() => {
+  if (!form.province || !form.city) return []
+  return getDistricts(form.province, form.city)
+})
+
+function onProvinceChange() {
+  form.city = ''
+  form.district = ''
+}
+
+function onCityChange() {
+  form.district = ''
 }
 
 onMounted(() => {

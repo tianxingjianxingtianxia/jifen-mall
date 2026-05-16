@@ -10,14 +10,21 @@
           <router-link to="/points-records" class="nav-link">积分明细</router-link>
         </div>
         <div class="header-right">
-          <span class="user-info">
-            <el-icon><User /></el-icon>
-            {{ userStore.nickname || userStore.userInfo?.username }}
-          </span>
-          <el-button text type="primary" @click="router.push('/addresses')">
-            <el-icon><Location /></el-icon> 地址管理
-          </el-button>
-          <el-button text type="danger" @click="handleLogout">退出登录</el-button>
+          <el-dropdown trigger="click">
+            <span class="user-info">
+              <el-icon><User /></el-icon>
+              {{ userStore.nickname || userStore.userInfo?.username }}
+              <el-icon><ArrowDown /></el-icon>
+            </span>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item @click="router.push('/orders')">我的订单</el-dropdown-item>
+                <el-dropdown-item @click="router.push('/points-records')">积分明细</el-dropdown-item>
+                <el-dropdown-item @click="router.push('/addresses')">地址管理</el-dropdown-item>
+                <el-dropdown-item divided @click="handleLogout">退出登录</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
         </div>
       </div>
     </header>
@@ -159,6 +166,17 @@
                 </span>
                 <span class="product-sales">已售 {{ product.saleCount }}</span>
               </div>
+              <div class="product-action">
+                <el-button
+                  v-if="product.stockStatus !== 'out_of_stock'"
+                  type="warning"
+                  size="small"
+                  @click.stop="quickExchange(product)"
+                >
+                  立即兑换
+                </el-button>
+                <el-button v-else size="small" disabled>已售罄</el-button>
+              </div>
             </div>
           </el-card>
         </el-col>
@@ -187,7 +205,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import {
   User, Location, Coin, Check, TrendCharts,
-  Search, Picture
+  Search, Picture, ArrowDown
 } from '@element-plus/icons-vue'
 import { useUserStore } from '../stores/user'
 import { getTodaySign, signIn, getPointsBalance } from '../api/points'
@@ -291,6 +309,10 @@ async function handleSignIn() {
 
 function goToProduct(id: number) {
   router.push(`/product/${id}`)
+}
+
+function quickExchange(product: any) {
+  router.push(`/product/${product.id}`)
 }
 
 function handleLogout() {
@@ -489,6 +511,10 @@ function handleLogout() {
 .product-sales {
   font-size: 12px;
   color: #909399;
+}
+.product-action {
+  padding: 8px 12px 12px;
+  text-align: center;
 }
 
 /* 分页 */

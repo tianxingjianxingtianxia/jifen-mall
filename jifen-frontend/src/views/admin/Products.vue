@@ -22,6 +22,23 @@
     <el-card shadow="never" class="table-card">
       <el-table :data="products" v-loading="loading" stripe style="width: 100%">
         <el-table-column prop="id" label="ID" width="60" />
+        <el-table-column label="图片" width="80">
+          <template #default="{ row }">
+            <el-image
+              v-if="row.coverImage"
+              :src="row.coverImage"
+              style="width: 50px; height: 50px; border-radius: 4px;"
+              fit="cover"
+            >
+              <template #error>
+                <div class="image-slot" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; background: #f5f7fa; border-radius: 4px;">
+                  <el-icon><PictureFilled /></el-icon>
+                </div>
+              </template>
+            </el-image>
+            <span v-else style="color: #c0c4cc;">无</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="name" label="名称" min-width="160" />
         <el-table-column prop="pointsRequired" label="所需积分" width="100" />
         <el-table-column prop="stock" label="库存" width="80" />
@@ -81,6 +98,21 @@
         </el-form-item>
         <el-form-item label="封面图URL" prop="coverImage">
           <el-input v-model="form.coverImage" placeholder="请输入封面图片URL" />
+          <div v-if="form.coverImage" style="margin-top: 8px;">
+            <el-image
+              :src="form.coverImage"
+              style="width: 120px; height: 120px; border-radius: 4px; border: 1px solid #dcdfe6;"
+              fit="cover"
+              @error="onImageError"
+            >
+              <template #error>
+                <div class="image-slot">
+                  <el-icon><PictureFilled /></el-icon>
+                  <span style="font-size: 12px; color: #909399;">加载失败</span>
+                </div>
+              </template>
+            </el-image>
+          </div>
         </el-form-item>
         <el-form-item label="所需积分" prop="pointsRequired">
           <el-input-number v-model="form.pointsRequired" :min="0" :max="999999" />
@@ -103,6 +135,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from 'element-plus'
+import { PictureFilled } from '@element-plus/icons-vue'
 import {
   getAdminProducts,
   createAdminProduct,
@@ -141,6 +174,10 @@ const rules: FormRules = {
   name: [{ required: true, message: '请输入商品名称', trigger: 'blur' }],
   pointsRequired: [{ required: true, message: '请设置所需积分', trigger: 'blur' }],
   stock: [{ required: true, message: '请设置库存', trigger: 'blur' }]
+}
+
+function onImageError(e: Event) {
+  console.warn('图片加载失败:', (e.target as HTMLImageElement).src)
 }
 
 onMounted(() => {
