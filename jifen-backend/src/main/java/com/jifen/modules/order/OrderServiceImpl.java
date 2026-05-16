@@ -244,14 +244,14 @@ public class OrderServiceImpl implements OrderService {
         return expired.size();
     }
 
-    // ===== 辅助方法 =====
+    // ===== 辅助方法 - public for admin usage =====
 
-    private String generateOrderNo() {
+    public String generateOrderNo() {
         return "JF" + DateUtil.format(LocalDateTime.now(), "yyyyMMddHHmmss")
                 + String.format("%04d", (int)(Math.random() * 10000));
     }
 
-    private OrderVO toOrderVO(Order order) {
+    public OrderVO toOrderVO(Order order) {
         OrderVO vo = new OrderVO();
         vo.setId(order.getId());
         vo.setOrderNo(order.getOrderNo());

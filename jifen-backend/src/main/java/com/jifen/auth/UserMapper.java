@@ -16,4 +16,7 @@ public interface UserMapper extends BaseMapper<User> {
 
     @Update("UPDATE wj_user SET points = points + #{points} WHERE id = #{userId}")
     int addPoints(@Param("userId") Long userId, @Param("points") Integer points);
+
+    @Update("UPDATE wj_user SET points = GREATEST(points - #{points}, 0) WHERE id = #{userId} AND points > 0")
+    int expirePoints(@Param("userId") Long userId, @Param("points") Integer points);
 }
