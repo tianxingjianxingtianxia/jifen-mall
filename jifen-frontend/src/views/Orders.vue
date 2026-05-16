@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { getOrders, cancelOrder, confirmReceipt, STATUS_MAP } from '@/api/orders'
-import type { OrderVO } from '@/api/orders'
-import { useUserStore } from '@/stores/user'
+import { getOrders, cancelOrder, confirmReceipt, STATUS_MAP } from '../api/orders'
+import type { OrderVO } from '../api/orders'
+import { useUserStore } from '../stores/user'
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -12,22 +12,23 @@ const orders = ref<OrderVO[]>([])
 const total = ref(0)
 const currentPage = ref(1)
 const pageSize = ref(10)
-const activeStatus = ref<number | undefined>(undefined)
+const activeStatus = ref<string>('')
 const loading = ref(false)
 
 const statusTabs = [
-  { label: '全部', value: undefined },
-  { label: '待发货', value: 0 },
-  { label: '已发货', value: 1 },
-  { label: '已完成', value: 2 },
-  { label: '已取消', value: 3 },
+  { label: '全部', value: '' },
+  { label: '待发货', value: '0' },
+  { label: '已发货', value: '1' },
+  { label: '已完成', value: '2' },
+  { label: '已取消', value: '3' },
 ]
 
 const fetchOrders = async () => {
   loading.value = true
   try {
+    const status = activeStatus.value === '' ? undefined : Number(activeStatus.value)
     const res = await getOrders({
-      status: activeStatus.value,
+      status: status,
       pageNum: currentPage.value,
       pageSize: pageSize.value,
     })
@@ -81,7 +82,7 @@ onMounted(fetchOrders)
     </div>
 
     <el-tabs :model-value="activeStatus" @tab-change="onTabChange">
-      <el-tab-pane v-for="tab in statusTabs" :key="String(tab.value)" :label="tab.label" :value="tab.value" />
+      <el-tab-pane v-for="tab in statusTabs" :key="tab.value" :label="tab.label" :name="tab.value" />
     </el-tabs>
 
     <div v-loading="loading" class="order-list">

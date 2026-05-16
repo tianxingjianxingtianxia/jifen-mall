@@ -4,15 +4,27 @@
     <header class="header">
       <div class="header-inner">
         <h1 class="logo">积分商城</h1>
+        <div class="header-nav">
+          <router-link to="/home" class="nav-link">首页</router-link>
+          <router-link to="/orders" class="nav-link">我的订单</router-link>
+          <router-link to="/points-records" class="nav-link">积分明细</router-link>
+        </div>
         <div class="header-right">
-          <span class="user-info">
-            <el-icon><User /></el-icon>
-            {{ userStore.nickname || userStore.userInfo?.username }}
-          </span>
-          <el-button text type="primary" @click="router.push('/addresses')">
-            <el-icon><Location /></el-icon> 地址管理
-          </el-button>
-          <el-button text type="danger" @click="handleLogout">退出登录</el-button>
+          <el-dropdown trigger="click">
+            <span class="user-info">
+              <el-icon><User /></el-icon>
+              {{ userStore.nickname || userStore.userInfo?.username }}
+              <el-icon><ArrowDown /></el-icon>
+            </span>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item @click="router.push('/orders')">我的订单</el-dropdown-item>
+                <el-dropdown-item @click="router.push('/points-records')">积分明细</el-dropdown-item>
+                <el-dropdown-item @click="router.push('/addresses')">地址管理</el-dropdown-item>
+                <el-dropdown-item divided @click="handleLogout">退出登录</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
         </div>
       </div>
     </header>
@@ -182,7 +194,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import {
   User, Location, Coin, Check, TrendCharts,
-  Search, Picture
+  Search, Picture, ArrowDown
 } from '@element-plus/icons-vue'
 import { useUserStore } from '../stores/user'
 import { getTodaySign, signIn, getPointsBalance } from '../api/points'
@@ -319,12 +331,30 @@ function handleLogout() {
   align-items: center;
   gap: 16px;
 }
-
 .user-info {
+  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 4px;
   color: #606266;
+}
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.nav-link {
+  color: #606266;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+.nav-link:hover {
+  color: #409eff;
+}
+.nav-link.router-link-active {
+  color: #409eff;
+  font-weight: 600;
 }
 
 /* 积分卡片 */

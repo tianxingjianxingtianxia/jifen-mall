@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getOrderDetail } from '@/api/orders'
-import type { OrderVO } from '@/api/orders'
-import { useUserStore } from '@/stores/user'
+import { getOrderDetail } from '../api/orders'
+import type { OrderVO } from '../api/orders'
+import { useUserStore } from '../stores/user'
 
 const route = useRoute()
 const router = useRouter()
