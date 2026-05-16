@@ -7,9 +7,9 @@ spring:
   application:
     name: jifen-backend
   datasource:
-    url: jdbc:mysql://192.168.1.49:3306/wj_jifen?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
-    username: root
-    password: root123
+    url: jdbc:mysql://192.168.1.49:13306/wj_jifen?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
+    username: user_test
+    password: 3.1415926
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       connection-init-sql: SET NAMES utf8mb4

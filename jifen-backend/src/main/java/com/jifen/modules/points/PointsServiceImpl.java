@@ -138,4 +138,15 @@ public class PointsServiceImpl implements PointsService {
             return 10;
         }
     }
+
+    @Override
+    @Transactional
+    public void topup(Long userId, int points) {
+        User user = userMapper.selectById(userId);
+        if (user == null) {
+            throw new BusinessException("用户不存在");
+        }
+        userMapper.addPointsAndEarned(userId, points);
+        log.info("[TEST] 用户{}充值{}积分", userId, points);
+    }
 }

@@ -32,6 +32,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
+        // Strip context-path
+        String ctxPath = request.getContextPath();
+        if (ctxPath != null && !ctxPath.isEmpty()) {
+            path = path.substring(ctxPath.length());
+        }
+
+        // CORS preflight
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
+
         // Skip filter for public paths
         if (isPublicPath(path)) {
             filterChain.doFilter(request, response);

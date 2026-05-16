@@ -26,4 +26,9 @@ public interface PointsService {
      * 积分明细分页查询（时间倒序）
      */
     PageResult<PointRecordVO> getRecords(Long userId, int pageNum, int pageSize);
+
+    /**
+     * [测试专用] 充值积分
+     */
+    void topup(Long userId, int points);
 }
