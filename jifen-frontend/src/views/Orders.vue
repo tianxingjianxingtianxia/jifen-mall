@@ -39,8 +39,8 @@ const fetchOrders = async () => {
   }
 }
 
-const onTabChange = (tab: any) => {
-  activeStatus.value = tab.props.value ?? undefined
+const onTabChange = (tabName: string) => {
+  activeStatus.value = tabName
   currentPage.value = 1
   fetchOrders()
 }
