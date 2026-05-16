@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS wj_admin (
 
 -- 插入默认管理员（密码: admin123）
 INSERT INTO wj_admin (username, password, nickname, status) VALUES
-('admin', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '系统管理员', 1);
+('admin', '$2a$10$h9L38vuF8Urk7U3wMsdKWuRQ0G69ivb5hR8KLpDtAS5na2U.fHKYG', '系统管理员', 1);
 
 -- ============================================================
 -- 3. 签到记录表

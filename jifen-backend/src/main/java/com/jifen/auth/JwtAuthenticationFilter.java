@@ -21,7 +21,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String[] PUBLIC_PATHS = {
         "/auth/login", "/auth/register",
         "/auth/admin/login",
-        "/products", "/products/"
     };
 
     @Override
@@ -31,9 +30,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String path = request.getRequestURI();
+        // Strip context-path for matching
+        String ctxPath = request.getContextPath();
+        if (ctxPath != null && !ctxPath.isEmpty()) {
+            path = path.substring(ctxPath.length());
+        }
 
         // Skip filter for public paths
         if (isPublicPath(path)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // Product list and detail are public (GET only)
+        if (request.getMethod().equals("GET") && (path.startsWith("/products") || path.startsWith("/products/"))) {
             filterChain.doFilter(request, response);
             return;
         }
