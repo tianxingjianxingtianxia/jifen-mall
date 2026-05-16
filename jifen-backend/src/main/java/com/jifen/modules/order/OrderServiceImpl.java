@@ -91,6 +91,9 @@ public class OrderServiceImpl implements OrderService {
             throw new BusinessException("商品库存不足");
         }
 
+        // 如果库存已为0，自动下架
+        productMapper.autoOffShelfIfStockZero(request.getProductId());
+
         // 7. 扣积分
         userMapper.deductPoints(userId, product.getPointsRequired());
 

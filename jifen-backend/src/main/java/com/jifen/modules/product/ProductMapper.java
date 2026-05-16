@@ -16,4 +16,7 @@ public interface ProductMapper extends BaseMapper<Product> {
 
     @Update("UPDATE wj_product SET sale_count = sale_count + 1 WHERE id = #{productId}")
     int incrementSaleCount(@Param("productId") Long productId);
+
+    @Update("UPDATE wj_product SET status = 0 WHERE id = #{productId} AND stock <= 0 AND status = 1")
+    int autoOffShelfIfStockZero(@Param("productId") Long productId);
 }
