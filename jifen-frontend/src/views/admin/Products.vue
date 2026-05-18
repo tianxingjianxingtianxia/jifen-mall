@@ -120,7 +120,6 @@
                 </el-button>
               </div>
             </div>
-            <el-input v-model="form.coverImage" placeholder="或手动输入封面图URL（可选）" style="margin-top: 8px;" />
           </div>
         </el-form-item>
         <el-form-item label="所需积分" prop="pointsRequired">

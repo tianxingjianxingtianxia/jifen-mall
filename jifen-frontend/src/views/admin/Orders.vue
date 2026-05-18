@@ -8,10 +8,10 @@
     <el-card shadow="never" class="filter-card">
       <el-tabs v-model="activeTab" @tab-change="onTabChange">
         <el-tab-pane label="全部" name="all" />
-        <el-tab-pane label="待发货" name="1" />
-        <el-tab-pane label="已发货" name="2" />
-        <el-tab-pane label="已完成" name="3" />
-        <el-tab-pane label="已取消" name="4" />
+        <el-tab-pane label="待发货" name="0" />
+        <el-tab-pane label="已发货" name="1" />
+        <el-tab-pane label="已完成" name="2" />
+        <el-tab-pane label="已取消" name="3" />
       </el-tabs>
 
       <el-form :inline="true" :model="searchForm" class="search-form">
