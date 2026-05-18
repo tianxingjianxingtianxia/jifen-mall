@@ -1,7 +1,6 @@
+<nav-bar title="积分明细" />
+
 <view class="page">
-  <view class="page-header">
-    <text class="page-title">积分明细</text>
-  </view>
 
   <view class="record-list" wx:if="{{records.length > 0}}">
     <view class="record-item" wx:for="{{records}}" wx:key="id">

@@ -2,7 +2,7 @@
   <!-- 用户信息头部 -->
   <view class="profile-header">
     <view class="avatar-wrap">
-      <text class="avatar-text">{{(nickname || '用').substring(0, 1)}}</text>
+      <text class="avatar-text">{{avatarFirst}}</text>
     </view>
     <view class="profile-info">
       <text class="profile-name">{{nickname || '用户'}}</text>
@@ -16,12 +16,6 @@
 
   <!-- 功能入口 -->
   <view class="menu-section">
-    <view class="menu-item" bindtap="onGoOrders">
-      <text class="menu-icon menu-icon-orders">📦</text>
-      <text class="menu-label">我的订单</text>
-      <text class="menu-arrow">›</text>
-    </view>
-    <view class="menu-divider"></view>
     <view class="menu-item" bindtap="onGoRecords">
       <text class="menu-icon menu-icon-records">📊</text>
       <text class="menu-label">积分明细</text>

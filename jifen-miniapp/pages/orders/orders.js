@@ -50,10 +50,11 @@ Page({
     }).then(data => {
       const list = data.list || data.records || [];
       // 预处理：状态文本和时间
-      const orderStatusText = { 0: '待发货', 1: '已发货', 2: '已完成', 3: '已取消' }
+      const statusMap = { 0: '待发货', 1: '已发货', 2: '已完成', 3: '已取消' }
+      const typeMap = { 0: 'pending', 1: 'shipped', 2: 'completed', 3: 'cancelled' }
       list.forEach(item => {
-        item._statusText = orderStatusText[item.status] || '未知'
-        item._statusType = orderStatusText[item.status] || ''
+        item._statusText = statusMap[item.status] || '未知'
+        item._statusType = typeMap[item.status] || ''
         item._createTime = item.createTime ? item.createTime.substring(0, 16).replace('T', ' ') : ''
       })
       this.setData({

@@ -5,6 +5,7 @@ Page({
   data: {
     userInfo: null,
     points: 0,
+    avatarFirst: '用',
   },
 
   onLoad() {
@@ -28,7 +29,12 @@ Page({
     }
     // 尝试从接口获取最新
     api.get('/user/info').then(data => {
-      this.setData({ userInfo: data });
+      const nick = data.nickname || data.username || '用户'
+      this.setData({
+        userInfo: data,
+        nickname: nick,
+        avatarFirst: nick.substring(0, 1),
+      });
       wx.setStorageSync('userInfo', JSON.stringify(data));
     }).catch(() => {});
   },
@@ -45,11 +51,17 @@ Page({
   },
 
   // 跳转到积分明细
+  onGoRecords() {
+    wx.navigateTo({ url: '/pages/points-records/points-records' });
+  },
   goToPointsRecords() {
     wx.navigateTo({ url: '/pages/points-records/points-records' });
   },
 
   // 跳转到地址管理
+  onGoAddresses() {
+    wx.navigateTo({ url: '/pages/addresses/addresses' });
+  },
   goToAddresses() {
     wx.navigateTo({ url: '/pages/addresses/addresses' });
   },

@@ -10,7 +10,7 @@
       </view>
       <view class="header-right">
         <view class="avatar-circle" bindtap="onGoProfile">
-          <text class="avatar-text">{{(nickname || '用').substring(0,1)}}</text>
+          <text class="avatar-text">{{firstChar}}</text>
         </view>
       </view>
     </view>
