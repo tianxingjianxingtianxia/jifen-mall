@@ -8,6 +8,7 @@
           <router-link to="/home" class="nav-link">首页</router-link>
           <router-link to="/orders" class="nav-link">我的订单</router-link>
           <router-link to="/points-records" class="nav-link">积分明细</router-link>
+          <router-link to="/addresses" class="nav-link">地址管理</router-link>
         </div>
         <div class="header-right">
           <el-dropdown trigger="click">
@@ -303,18 +304,18 @@ function handleLogout() {
 
 <style scoped>
 .header {
-  background: #fff;
-  border-bottom: 1px solid #ebeef5;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   position: sticky;
   top: 0;
   z-index: 100;
+  box-shadow: 0 2px 12px rgba(102, 126, 234, 0.3);
 }
 
 .header-inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
-  height: 60px;
+  padding: 0 24px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -322,8 +323,9 @@ function handleLogout() {
 
 .logo {
   font-size: 22px;
-  color: #303133;
-  font-weight: 600;
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
 .header-right {
@@ -336,25 +338,40 @@ function handleLogout() {
   display: flex;
   align-items: center;
   gap: 4px;
-  color: #606266;
+  color: rgba(255,255,255,0.9);
+  font-size: 14px;
+}
+.user-info:hover {
+  color: #fff;
 }
 .header-nav {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 6px;
 }
 .nav-link {
-  color: #606266;
+  color: rgba(255,255,255,0.75);
   text-decoration: none;
   font-size: 14px;
-  transition: color 0.2s;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.2s;
 }
 .nav-link:hover {
-  color: #409eff;
+  color: #fff;
+  background: rgba(255,255,255,0.15);
 }
 .nav-link.router-link-active {
-  color: #409eff;
+  color: #fff;
   font-weight: 600;
+  background: rgba(255,255,255,0.2);
+}
+
+/* 页面内容 */
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
 }
 
 /* 积分卡片 */
