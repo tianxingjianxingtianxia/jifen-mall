@@ -237,11 +237,12 @@ async function handleSubmit() {
 
   submitting.value = true
   try {
+    const submitData = { ...form, isDefault: form.isDefault ? 1 : 0 }
     if (isEdit.value && editingId.value !== null) {
-      await updateAddress(editingId.value, form)
+      await updateAddress(editingId.value, submitData)
       ElMessage.success('地址更新成功')
     } else {
-      await addAddress(form)
+      await addAddress(submitData)
       ElMessage.success('地址添加成功')
     }
     dialogVisible.value = false
