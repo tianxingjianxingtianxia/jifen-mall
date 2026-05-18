@@ -47,21 +47,11 @@ const config = reactive<Record<string, string>>({})
 
 const labelMap: Record<string, string> = {
   sign_in_points: '每日签到奖励积分',
-  exchange_ratio: '积分兑换比例（多少积分兑换1元）',
-  order_expire_minutes: '未付款订单自动取消时间（分钟）',
-  repeat_exchange_days: '商品重复兑换间隔（天）',
   signInPoints: '每日签到奖励积分',
-  exchangeRate: '积分兑换比例（多少积分兑换1元）',
-  dailySignInLimit: '每日最多签到次数',
-  orderTimeoutMinutes: '未付款订单自动取消时间（分钟）',
-  maxProductsPerPage: '商品列表每页显示数量',
-  pointsValidityDays: '积分有效期天数（过期后积分不可用）',
-  systemNotice: '系统公告（显示在首页顶部）',
-  contactPhone: '客服联系电话',
-  contactEmail: '客服邮箱'
+  pointsValidityDays: '积分有效期天数（过期后积分不可用）'
 }
 
-const textareaKeys: string[] = ['systemNotice']
+const textareaKeys: string[] = []
 
 function configLabel(key: string): string {
   return labelMap[key] || key
