@@ -1,5 +1,4 @@
 /* 积分商城 - 全局样式 */
-@import 'utils/config.wxss';
 
 /* CSS 变量 */
 page {
