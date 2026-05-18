@@ -42,7 +42,7 @@
         <el-table-column label="操作" width="120" fixed="right">
           <template #default="{ row }">
             <el-button
-              v-if="row.status === 1"
+              v-if="row.status === 0"
               size="small"
               type="primary"
               @click="openShipDialog(row)"
