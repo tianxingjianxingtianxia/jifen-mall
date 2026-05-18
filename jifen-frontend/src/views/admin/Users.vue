@@ -18,6 +18,7 @@
         <el-form-item>
           <el-button type="primary" @click="search">搜索</el-button>
           <el-button @click="resetSearch">重置</el-button>
+          <el-button @click="exportUsers">导出</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -30,29 +31,22 @@
         <el-table-column prop="nickname" label="昵称" width="120" />
         <el-table-column prop="phone" label="手机号" width="130" />
         <el-table-column prop="points" label="积分" width="80" />
-        <el-table-column label="状态" width="80">
-          <template #default="{ row }">
-            <el-tag :type="row.status === 1 ? 'success' : 'danger'" size="small">
-              {{ row.status === 1 ? '正常' : '禁用' }}
-            </el-tag>
-          </template>
-        </el-table-column>
         <el-table-column prop="createTime" label="注册时间" width="170" />
         <el-table-column label="操作" width="220" fixed="right">
           <template #default="{ row }">
             <el-button
               size="small"
               type="primary"
-              @click="openAdjustDialog(row)"
+              @click="viewUserDetail(row)"
             >
-              调整积分
+              详情
             </el-button>
             <el-button
               size="small"
-              :type="row.status === 1 ? 'warning' : 'success'"
-              @click="handleToggleStatus(row)"
+              type="success"
+              @click="openAdjustDialog(row)"
             >
-              {{ row.status === 1 ? '禁用' : '启用' }}
+              调整积分
             </el-button>
           </template>
         </el-table-column>
@@ -68,6 +62,23 @@
         />
       </div>
     </el-card>
+
+    <!-- 用户详情对话框 -->
+    <el-dialog
+      v-model="detailDialogVisible"
+      title="用户详情"
+      width="480px"
+      :close-on-click-modal="false"
+    >
+      <el-descriptions :column="1" border v-if="detailUser">
+        <el-descriptions-item label="用户ID">{{ detailUser.id }}</el-descriptions-item>
+        <el-descriptions-item label="用户名">{{ detailUser.username }}</el-descriptions-item>
+        <el-descriptions-item label="昵称">{{ detailUser.nickname }}</el-descriptions-item>
+        <el-descriptions-item label="手机号">{{ detailUser.phone || '-' }}</el-descriptions-item>
+        <el-descriptions-item label="当前积分">{{ detailUser.points }}</el-descriptions-item>
+        <el-descriptions-item label="注册时间">{{ detailUser.createTime }}</el-descriptions-item>
+      </el-descriptions>
+    </el-dialog>
 
     <!-- 调整积分对话框 -->
     <el-dialog
@@ -192,6 +203,19 @@ async function handleToggleStatus(row: UserItem) {
 }
 
 // ===== 调整积分对话框 =====
+const detailDialogVisible = ref(false)
+const detailUser = ref<UserItem | null>(null)
+
+function viewUserDetail(row: UserItem) {
+  detailUser.value = row
+  detailDialogVisible.value = true
+}
+
+function exportUsers() {
+  const token = localStorage.getItem('token')
+  window.open('/api/admin/users/export?token=' + token, '_blank')
+}
+
 const adjustDialogVisible = ref(false)
 const adjustUserId = ref<number | null>(null)
 const currentPoints = ref(0)
