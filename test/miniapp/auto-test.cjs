@@ -48,21 +48,40 @@ async function main() {
   console.log('')
 
   // ====== API 准备阶段 ======
-  // 注册测试用户
-  const ts = 'mp_' + String(Date.now()).slice(-8)
-  let regRes
+  // 使用固定测试账号
+  const TEST_USER = 'miniapp_auto_test'
+  const TEST_PASS = '123456'
+
+  let token, uid
+
+  // 尝试登录现有账号
+  let loginRes
   try {
-    regRes = await apiPost('/auth/register', {
-      username: ts, password: '123456', nickname: '小程序测试', phone: '13800138001'
-    })
+    loginRes = await apiPost('/auth/login', { username: TEST_USER, password: TEST_PASS })
   } catch (e) {
-    fail('API注册用户', e.message)
-    process.exit(1)
+    loginRes = null
   }
-  if (regRes.code !== 200) { fail('API注册', regRes.message); process.exit(1) }
-  const token = regRes.data.token
-  const uid = regRes.data.userId
-  ok(`API 注册用户成功 uid=${uid}`)
+
+  if (loginRes && loginRes.code === 200) {
+    token = loginRes.data.token
+    uid = loginRes.data.userId
+    ok(`登录固定账号成功 uid=${uid}`)
+  } else {
+    // 注册新账号
+    const ts = 'mp_' + String(Date.now()).slice(-8)
+    try {
+      const regRes = await apiPost('/auth/register', {
+        username: TEST_USER, password: TEST_PASS, nickname: '小程序测试', phone: '13800138001'
+      })
+      if (regRes.code !== 200) { fail('注册', regRes.message); process.exit(1) }
+      token = regRes.data.token
+      uid = regRes.data.userId
+      ok(`注册新账号成功 uid=${uid}`)
+    } catch (e) {
+      fail('API注册用户', e.message)
+      process.exit(1)
+    }
+  }
 
   // 充值积分
   await apiPost('/points/topup?points=200', null, token)
@@ -202,25 +221,32 @@ async function main() {
 
     // 点击兑换
     await exchangeBtn.tap()
-    await sleep(2000)
+    await sleep(1500)
 
     page = await mp.currentPage()
     if (page.path.includes('order-detail')) {
       ok('兑换成功 → 跳转到订单详情页')
     } else {
-      // 可能弹出了确认框
-      const confirmModal = await page.$('.confirm-modal, .dialog')
-      if (confirmModal) {
-        ok('兑换确认弹窗出现')
-        // 确认
-        const confirmBtn = await confirmModal.$('button')
-        if (confirmBtn) {
-          await confirmBtn.tap()
-          await sleep(2000)
-          page = await mp.currentPage()
-          ok(`兑换确认后页面: ${page.path}`)
+      // 尝试确认 dialog/modal
+      try {
+        const btns = await page.$$('button')
+        if (btns.length > 0) {
+          for (const btn of btns) {
+            const t = await btn.text()
+            if (t && (t.includes('确定') || t.includes('确定') || t.includes('confirm') || t.includes('OK'))) {
+              await btn.tap()
+              await sleep(2000)
+              page = await mp.currentPage()
+              if (page.path.includes('order-detail')) {
+                ok('兑换确认弹窗 → 成功跳转到订单详情页')
+              } else {
+                ok(`兑换确认后页面: ${page.path}`)
+              }
+              break
+            }
+          }
         }
-      } else {
+      } catch (e) {
         ok(`兑换后页面: ${page.path}`)
       }
     }

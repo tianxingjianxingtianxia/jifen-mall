@@ -36,8 +36,10 @@ Page({
 
   onShow() {
     this.loadProducts(true);
-    this.loadPointsBalance();
-    this.loadTodaySign();
+    setTimeout(() => {
+      this.loadPointsBalance();
+      this.loadTodaySign();
+    }, 500);
   },
 
   // 加载积分余额
@@ -102,6 +104,17 @@ Page({
 
   onSearch() {
     this.loadProducts(true);
+  },
+
+  // 跳转商品详情
+  onGoDetail(e) {
+    const id = e.currentTarget.dataset.id;
+    wx.navigateTo({ url: '/pages/product-detail/product-detail?id=' + id });
+  },
+
+  // 跳转个人中心
+  onGoProfile() {
+    wx.switchTab({ url: '/pages/profile/profile' });
   },
 
   // 排序选择

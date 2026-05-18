@@ -19,7 +19,10 @@ Page({
   },
 
   onShow() {
-    this.loadOrders(true);
+    // onShow 时 token 可能还没注入，等 1 秒再加载
+    setTimeout(() => {
+      this.loadOrders(true);
+    }, 1000);
   },
 
   // Tab 切换
@@ -46,6 +49,13 @@ Page({
       pageSize: PAGE_SIZE,
     }).then(data => {
       const list = data.list || data.records || [];
+      // 预处理：状态文本和时间
+      const orderStatusText = { 0: '待发货', 1: '已发货', 2: '已完成', 3: '已取消' }
+      list.forEach(item => {
+        item._statusText = orderStatusText[item.status] || '未知'
+        item._statusType = orderStatusText[item.status] || ''
+        item._createTime = item.createTime ? item.createTime.substring(0, 16).replace('T', ' ') : ''
+      })
       this.setData({
         orders: reset ? list : this.data.orders.concat(list),
         pageNum,

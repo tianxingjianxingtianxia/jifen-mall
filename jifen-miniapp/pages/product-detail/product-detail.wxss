@@ -1,125 +1,68 @@
-.page-container {
-  padding: 0 0 160rpx;
-  min-height: 100vh;
-  box-sizing: border-box;
-}
+.page { background: #f5f7fa; min-height: 100vh; }
+.loading-wrap { display: flex; align-items: center; justify-content: center; padding: 200rpx 0; color: #909399; font-size: 28rpx; }
 
 /* 轮播图 */
-.detail-swiper {
-  width: 100%;
-  height: 750rpx;
-}
-.swiper-img {
-  width: 100%;
-  height: 100%;
-}
+.detail-swiper { width: 100%; height: 750rpx; }
+.swiper-img { width: 100%; height: 100%; }
 
-/* 商品信息 */
-.detail-info {
-  padding: 30rpx;
-  margin: 20rpx 30rpx;
+/* 信息区 */
+.detail-section {
+  background: #fff;
+  border-radius: 24rpx;
+  margin: 20rpx 24rpx;
+  padding: 28rpx 30rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.04);
 }
-.detail-name {
-  font-size: 34rpx;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 16rpx;
-  display: block;
+.detail-header { display: flex; align-items: flex-start; justify-content: space-between; }
+.detail-name { font-size: 32rpx; font-weight: 600; color: #303133; flex: 1; }
+.detail-meta { text-align: right; flex-shrink: 0; }
+.detail-points { font-size: 44rpx; font-weight: 800; color: #e6a23c; display: block; }
+.detail-unit { font-size: 24rpx; color: #e6a23c; }
+.detail-tags { display: flex; gap: 12rpx; margin-top: 16rpx; }
+.tag {
+  font-size: 22rpx; padding: 4rpx 16rpx; border-radius: 20rpx;
 }
-.detail-points-row {
-  display: flex;
-  align-items: baseline;
-  gap: 16rpx;
-  margin-bottom: 12rpx;
-}
-.detail-points {
-  font-size: 40rpx;
-  font-weight: 700;
-  color: var(--danger);
-}
-.detail-price {
-  font-size: 26rpx;
-  color: var(--text-secondary);
-  text-decoration: line-through;
-}
-.detail-meta {
-  display: flex;
-  gap: 40rpx;
-  font-size: 24rpx;
-  color: var(--text-secondary);
-}
+.tag-stock { background: #f0f9ff; color: #409eff; }
+.tag-sold { background: #fef6f0; color: #e6a23c; }
+.tag-sold-out { background: #fef0f0; color: #f56c6c; }
+.section-title { font-size: 28rpx; font-weight: 600; color: #303133; margin-bottom: 16rpx; }
+.desc-text { font-size: 26rpx; color: #606266; line-height: 1.6; }
 
-/* 描述 */
-.detail-desc {
-  padding: 30rpx;
-  margin: 0 30rpx 20rpx;
-}
-.desc-content {
-  font-size: 28rpx;
-  color: var(--text-regular);
-  line-height: 1.6;
-}
+/* 地址卡片 */
+.address-card { }
+.address-card:active { opacity: 0.8; }
+.address-info { }
+.address-top { display: flex; align-items: center; gap: 12rpx; margin-bottom: 8rpx; }
+.address-name { font-size: 28rpx; font-weight: 500; color: #303133; }
+.address-phone { font-size: 26rpx; color: #606266; }
+.address-tag { font-size: 20rpx; background: #667eea; color: #fff; padding: 2rpx 12rpx; border-radius: 16rpx; }
+.address-detail { font-size: 24rpx; color: #909399; }
+.address-empty { display: flex; align-items: center; justify-content: space-between; font-size: 26rpx; color: #c0c4cc; }
+.arrow { font-size: 40rpx; color: #c0c4cc; }
 
-/* 收货地址 */
-.address-section {
-  padding: 30rpx;
-  margin: 0 30rpx 20rpx;
-}
-.section-title {
-  font-size: 30rpx;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 16rpx;
-}
-.address-name-phone {
+/* 底部栏 */
+.bottom-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: #fff;
+  padding: 16rpx 30rpx env(safe-area-inset-bottom, 16rpx);
   display: flex;
   align-items: center;
-  gap: 16rpx;
-  margin-bottom: 8rpx;
-}
-.address-name {
-  font-size: 28rpx;
-  font-weight: 500;
-}
-.address-phone {
-  font-size: 26rpx;
-  color: var(--text-regular);
-}
-.default-tag {
-  font-size: 22rpx;
-  color: var(--primary-start);
-  background: rgba(102, 126, 234, 0.1);
-  padding: 4rpx 12rpx;
-  border-radius: 6rpx;
-}
-.address-detail {
-  font-size: 26rpx;
-  color: var(--text-secondary);
-  display: block;
-}
-.address-empty {
-  display: flex;
   justify-content: space-between;
-  align-items: center;
-  color: var(--text-secondary);
-  font-size: 28rpx;
-}
-.arrow {
-  font-size: 32rpx;
-  color: var(--text-secondary);
-}
-
-/* 底部兑换按钮 */
-.exchange-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 20rpx 30rpx;
-  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
-  background: var(--card-bg);
   box-shadow: 0 -4rpx 20rpx rgba(0,0,0,0.06);
+  z-index: 100;
 }
+.bottom-points { flex: 1; }
+.bottom-points-num { font-size: 40rpx; font-weight: 800; color: #e6a23c; }
+.bottom-points-unit { font-size: 24rpx; color: #e6a23c; margin-left: 4rpx; }
 .exchange-btn {
-  width: 100%;
+  height: 88rpx; line-height: 88rpx;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff; border-radius: 44rpx;
+  font-size: 30rpx; font-weight: 600;
+  padding: 0 60rpx;
+  border: none;
+  transition: opacity 0.2s;
 }
+.exchange-btn:active { opacity: 0.85; }
+.exchange-btn[disabled] { background: #c0c4cc; }
+.exchange-btn::after { border: none; }

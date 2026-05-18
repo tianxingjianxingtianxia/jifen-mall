@@ -1,66 +1,69 @@
-<nav-bar title="商品详情" />
-
-<scroll-view class="page-container" scroll-y enhanced show-scrollbar="{{false}}"
-  style="padding-top: calc(88rpx + env(safe-area-inset-top));">
-
-  <view wx:if="{{loading}}" class="loading-container">
+<scroll-view class="page" scroll-y>
+  <view wx:if="{{loading}}" class="loading-wrap">
     <text>加载中...</text>
+    <view style="height:100vh;"></view>
   </view>
 
   <view wx:elif="{{product}}">
     <!-- 轮播图 -->
-    <swiper class="detail-swiper" indicator-dots autoplay circular interval="3000">
-      <swiper-item wx:for="{{product.images || [product.coverImage]}}" wx:key="*this">
-        <image class="swiper-img" src="{{item}}" mode="aspectFill" bindtap="onPreviewImage" data-index="{{index}}" />
+    <swiper class="detail-swiper" indicator-dots="{{product._images.length > 1}}" autoplay circular interval="3000"
+      indicator-color="rgba(255,255,255,0.4)" indicator-active-color="#fff">
+      <swiper-item wx:for="{{product._images || [product._coverImage]}}" wx:key="*this">
+        <image class="swiper-img" src="{{item}}" mode="aspectFill" />
       </swiper-item>
     </swiper>
 
     <!-- 商品信息 -->
-    <view class="detail-info card">
-      <text class="detail-name">{{product.name}}</text>
-      <view class="detail-points-row">
-        <text class="detail-points">{{product.pointsRequired}} 积分</text>
-        <text class="detail-price" wx:if="{{product.price}}">¥{{product.price}}</text>
+    <view class="detail-section">
+      <view class="detail-header">
+        <text class="detail-name">{{product.name}}</text>
+        <view class="detail-meta">
+          <text class="detail-points">{{product.pointsRequired}}</text>
+          <text class="detail-unit">积分</text>
+        </view>
       </view>
-      <view class="detail-meta">
-        <text>库存：{{product.stock}}</text>
-        <text>已售：{{product.saleCount || 0}}</text>
+      <view class="detail-tags">
+        <text class="tag tag-stock" wx:if="{{product.stock > 0}}">库存 {{product.stock}}</text>
+        <text class="tag tag-sold">已售 {{product.saleCount || 0}}</text>
+        <text class="tag tag-sold-out" wx:if="{{product.stock < 1}}">已售罄</text>
       </view>
     </view>
 
     <!-- 商品描述 -->
-    <view class="detail-desc card" wx:if="{{product.description}}">
+    <view class="detail-section" wx:if="{{product.description}}">
       <view class="section-title">商品描述</view>
-      <text class="desc-content">{{product.description}}</text>
+      <text class="desc-text">{{product.description}}</text>
     </view>
 
     <!-- 收货地址 -->
-    <view class="address-section card" bindtap="onSelectAddress">
+    <view class="detail-section address-card" bindtap="onSelectAddress">
       <view class="section-title">收货地址</view>
       <view wx:if="{{selectedAddress}}" class="address-info">
-        <view class="address-name-phone">
+        <view class="address-top">
           <text class="address-name">{{selectedAddress.receiverName}}</text>
           <text class="address-phone">{{selectedAddress.receiverPhone}}</text>
-          <text class="default-tag" wx:if="{{selectedAddress.isDefault}}">默认</text>
+          <text class="address-tag" wx:if="{{selectedAddress.isDefault}}">默认</text>
         </view>
-        <text class="address-detail">
-          {{selectedAddress.province}}{{selectedAddress.city}}{{selectedAddress.district}}{{selectedAddress.detailAddress}}
-        </text>
+        <text class="address-detail">{{selectedAddress.province}}{{selectedAddress.city}}{{selectedAddress.district}}{{selectedAddress.detailAddress}}</text>
       </view>
       <view wx:else class="address-empty">
         <text>请选择收货地址</text>
-        <text class="arrow">⟩</text>
+        <text class="arrow">›</text>
       </view>
     </view>
 
-    <!-- 兑换按钮 -->
-    <view class="exchange-bar">
-      <button class="btn-primary exchange-btn" disabled="{{product.stock < 1}}"
-        bindtap="onExchange">
-        {{product.stock < 1 ? '已售罄' : '立即兑换'}}
-      </button>
-    </view>
+    <!-- 底部固定栏 -->
+    <view style="height:120rpx;"></view>
   </view>
-
-  <empty-view wx:else text="商品不存在" />
 </scroll-view>
+
+<!-- 底部兑换栏 -->
+<view class="bottom-bar" wx:if="{{product && !loading}}">
+  <view class="bottom-points">
+    <text class="bottom-points-num">{{product.pointsRequired}}</text>
+    <text class="bottom-points-unit">积分</text>
+  </view>
+  <button class="exchange-btn" disabled="{{product.stock < 1}}" bindtap="onExchange">
+    {{product.stock < 1 ? '已售罄' : '立即兑换'}}
+  </button>
+</view>
