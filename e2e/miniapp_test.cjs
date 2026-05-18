@@ -10,7 +10,7 @@
 
 const automator = require('miniprogram-automator')
 
-const WS_ENDPOINT = 'ws://localhost:9420'
+const WS_ENDPOINT = process.env.WS_PORT ? 'ws://localhost:' + process.env.WS_PORT : 'ws://localhost:9420'
 const API_BASE = 'http://192.168.2.17:8080/api'
 
 let passed = 0
