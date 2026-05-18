@@ -9,7 +9,7 @@ export interface Address {
   city: string
   district: string
   detailAddress: string
-  isDefault: boolean
+  isDefault: number
 }
 
 export interface AddressInput {
@@ -19,7 +19,7 @@ export interface AddressInput {
   city: string
   district: string
   detailAddress: string
-  isDefault: boolean
+  isDefault: number
 }
 
 /** 获取地址列表 */
