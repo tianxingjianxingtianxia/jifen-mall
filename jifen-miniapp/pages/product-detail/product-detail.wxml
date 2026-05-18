@@ -9,11 +9,15 @@
 
   <view wx:elif="{{product}}">
     <!-- 商品展示区 -->
-    <image class="product-img" src="{{product.image || '/assets/images/default.png'}}" mode="widthFix" />
+    <image class="product-img" src="{{product.coverImage}}" mode="widthFix" />
+    <view wx:if="{{product.images && product.images.length > 0}}" class="product-thumbs">
+      <image wx:for="{{product.images}}" wx:key="*this" class="thumb-img" src="{{item}}" mode="aspectFill" />
+    </view>
 
     <view class="info-card card">
       <text class="product-name">{{product.name}}</text>
-      <text class="product-points">{{product.points}} 积分</text>
+      <text class="product-points">{{product.pointsRequired}} 积分</text>
+      <text class="product-stock" wx:if="{{product.stock != null}}">库存：{{product.stock}} | 已售：{{product.saleCount || 0}}</text>
       <text class="product-desc" wx:if="{{product.description}}">{{product.description}}</text>
     </view>
 
