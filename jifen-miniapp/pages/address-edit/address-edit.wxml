@@ -21,36 +21,21 @@
     <!-- 省份 -->
     <view class="form-item">
       <text class="form-label">省份</text>
-      <picker mode="selector" range="{{provinces}}" value="{{provinceIndex}}" bindchange="onProvinceChange">
-        <view class="form-picker">
-          <text class="{{province ? '' : 'placeholder'}}">{{province || '请选择省份'}}</text>
-          <text class="picker-arrow">⟩</text>
-        </view>
-      </picker>
+      <input class="form-input" placeholder="如：湖南省" value="{{province}}" bindinput="onProvinceInput" />
     </view>
     <view class="form-divider"></view>
 
     <!-- 城市 -->
     <view class="form-item">
       <text class="form-label">城市</text>
-      <picker mode="selector" range="{{cities}}" value="{{cityIndex}}" bindchange="onCityChange" disabled="{{cities.length === 0}}">
-        <view class="form-picker">
-          <text class="{{city ? '' : 'placeholder'}}">{{city || '请选择城市'}}</text>
-          <text class="picker-arrow">⟩</text>
-        </view>
-      </picker>
+      <input class="form-input" placeholder="如：长沙市" value="{{city}}" bindinput="onCityInput" />
     </view>
     <view class="form-divider"></view>
 
     <!-- 区/县 -->
     <view class="form-item">
       <text class="form-label">区/县</text>
-      <picker mode="selector" range="{{districts}}" value="{{districtIndex}}" bindchange="onDistrictChange" disabled="{{districts.length === 0}}">
-        <view class="form-picker">
-          <text class="{{district ? '' : 'placeholder'}}">{{district || '请选择区/县'}}</text>
-          <text class="picker-arrow">⟩</text>
-        </view>
-      </picker>
+      <input class="form-input" placeholder="如：开福区" value="{{district}}" bindinput="onDistrictInput" />
     </view>
     <view class="form-divider"></view>
 

@@ -11,20 +11,21 @@
 
 .form-item {
   display: flex;
-  align-items: center;
-  min-height: 88rpx;
-  padding: 12rpx 0;
+  flex-direction: column;
+  min-height: 100rpx;
+  padding: 16rpx 0;
 }
 
 .form-item-switch {
+  flex-direction: row;
+  align-items: center;
   justify-content: space-between;
 }
 
 .form-label {
-  font-size: 28rpx;
-  color: var(--text-primary);
-  width: 140rpx;
-  flex-shrink: 0;
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  margin-bottom: 8rpx;
 }
 
 .form-input {

@@ -121,6 +121,9 @@ Page({
   // 表单输入
   onNameInput(e) { this.setData({ name: e.detail.value }); },
   onPhoneInput(e) { this.setData({ phone: e.detail.value }); },
+  onProvinceInput(e) { this.setData({ province: e.detail.value }); },
+  onCityInput(e) { this.setData({ city: e.detail.value }); },
+  onDistrictInput(e) { this.setData({ district: e.detail.value }); },
   onDetailInput(e) { this.setData({ detailAddress: e.detail.value }); },
   onDefaultChange(e) { this.setData({ isDefault: e.detail.value }); },
 
@@ -131,10 +134,10 @@ Page({
     if (!name) { showToast('请输入收货人姓名'); return; }
     if (!phone) { showToast('请输入手机号'); return; }
     if (!/^1\d{10}$/.test(phone)) { showToast('请输入正确的手机号'); return; }
-    if (!province) { showToast('请选择省份'); return; }
+    if (!province) { showToast('请输入省份'); return; }
     if (!detailAddress) { showToast('请输入详细地址'); return; }
 
-    const data = { name, phone, province, city, district, detailAddress, isDefault };
+    const data = { receiverName: name, receiverPhone: phone, province, city, district, detailAddress, isDefault: isDefault ? 1 : 0 };
 
     wx.showLoading({ title: '保存中...' });
 
