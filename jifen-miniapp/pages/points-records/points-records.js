@@ -15,7 +15,9 @@ Page({
   },
 
   onLoad() {
-    this.loadRecords(true);
+    setTimeout(() => {
+      this.loadRecords(true);
+    }, 500);
   },
 
   loadRecords(reset = false) {
