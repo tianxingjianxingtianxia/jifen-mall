@@ -36,8 +36,8 @@ Page({
     this.setData({ loading: true });
     api.get('/addresses/' + id).then(data => {
       this.setData({
-        name: data.name || '',
-        phone: data.phone || '',
+        name: data.receiverName || data.name || '',
+        phone: data.receiverPhone || data.phone || '',
         province: data.province || '',
         city: data.city || '',
         district: data.district || '',
