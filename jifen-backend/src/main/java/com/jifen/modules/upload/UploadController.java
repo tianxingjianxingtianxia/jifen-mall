@@ -64,8 +64,8 @@ public class UploadController {
             return Result.error("文件上传失败: " + e.getMessage());
         }
 
-        // Return accessible URL - the static resource handler maps /uploads/** to the uploads dir
-        String fileUrl = "/api/uploads/" + newFilename;
+        // Return accessible URL
+        String fileUrl = "http://localhost:8080/api/uploads/" + newFilename;
         return Result.success(fileUrl);
     }
 }

@@ -238,7 +238,12 @@ async def main():
         check("图片上传", upload_ok)
         if upload_ok:
             url = r["data"]
-            r2 = subprocess.run(["curl","-s","-o","/dev/null","-w","%{http_code}","http://localhost:8080"+url], capture_output=True, text=True)
+            # 如果返回的是完整URL则直接用，否则拼完整
+            if url.startswith("http"):
+                check_url = url
+            else:
+                check_url = "http://localhost:8080" + url
+            r2 = subprocess.run(["curl","-s","-o","/dev/null","-w","%{http_code}", check_url], capture_output=True, text=True)
             check("上传文件可访问", r2.stdout=="200")
 
         await browser.close()

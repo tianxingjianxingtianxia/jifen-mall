@@ -185,8 +185,11 @@ const beforeUpload = (file: File) => {
 
 const onUploadSuccess = (response: any, file: File, fileList: any) => {
   uploading.value = false
-  if (response && (response.url || response.data?.url)) {
-    form.coverImage = response.url || response.data.url
+  if (response && response.code === 200 && response.data) {
+    form.coverImage = response.data
+    ElMessage.success('图片上传成功')
+  } else if (response && response.url) {
+    form.coverImage = response.url
     ElMessage.success('图片上传成功')
   } else {
     ElMessage.error('上传响应格式异常')
