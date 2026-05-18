@@ -38,8 +38,6 @@ public class OrderServiceImpl implements OrderService {
     private final AddressMapper addressMapper;
     private final PointRecordMapper pointRecordMapper;
 
-    private static final int ORDER_EXPIRE_MINUTES = 15;
-
     @Override
     @Transactional
     public OrderVO createOrder(Long userId, CreateOrderRequest request) {
@@ -100,7 +98,6 @@ public class OrderServiceImpl implements OrderService {
         );
         order.setStatus(0); // 待发货
         order.setPaidAt(LocalDateTime.now());
-        order.setExpireTime(LocalDateTime.now().plusMinutes(ORDER_EXPIRE_MINUTES));
         orderMapper.insert(order);
 
         // 11. 写入积分变动记录
@@ -154,10 +151,6 @@ public class OrderServiceImpl implements OrderService {
         }
         if (order.getStatus() != 0) {
             throw new BusinessException("当前状态不允许取消");
-        }
-        if (order.getPaidAt() != null
-                && LocalDateTime.now().isAfter(order.getPaidAt().plusMinutes(ORDER_EXPIRE_MINUTES))) {
-            throw new BusinessException("已超过15分钟取消时限");
         }
 
         // 取消订单
