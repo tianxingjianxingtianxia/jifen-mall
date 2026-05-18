@@ -1,7 +1,7 @@
 <!-- 商品卡片 -->
 <view class="product-card" bindtap="onClick">
   <view class="product-img-wrap">
-    <image class="product-img" src="{{product.coverImage || '/assets/images/default.png'}}" mode="aspectFill" />
+    <image class="product-img" src="{{product.coverImage}}" mode="aspectFill" />
     <view class="product-stock-tag" wx:if="{{product.stock < 1}}">已售罄</view>
   </view>
   <view class="product-info">

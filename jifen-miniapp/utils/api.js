@@ -27,6 +27,13 @@ const request = (url, options = {}) => {
         if (data.code === 200) {
           resolve(data.data);
         } else if (data.code === 401) {
+          // 公开接口不需要认证，直接 reject
+          const publicPaths = ['/products', '/auth/login', '/auth/register', '/auth/wx-login'];
+          const isPublic = publicPaths.some(p => url.startsWith(p));
+          if (isPublic) {
+            reject(data);
+            return;
+          }
           // token 过期，尝试静默登录
           if (!isRefreshing) {
             isRefreshing = true;

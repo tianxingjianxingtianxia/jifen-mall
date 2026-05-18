@@ -25,9 +25,13 @@ Page({
   },
 
   onLoad() {
-    this.loadPointsBalance();
-    this.loadTodaySign();
     this.loadProducts(true);
+    // 积分和签到在登录后加载
+    const token = wx.getStorageSync('token');
+    if (token) {
+      this.loadPointsBalance();
+      this.loadTodaySign();
+    }
   },
 
   onShow() {
@@ -67,6 +71,17 @@ Page({
       pageSize: PAGE_SIZE,
     }).then(data => {
       const list = data.list || data.records || [];
+      // 拼接完整图片 URL
+      const API_BASE = require('../../utils/config').default.API_BASE_URL;
+      const baseUrl = API_BASE.replace('/api', '');
+      list.forEach(item => {
+        if (item.coverImage && !item.coverImage.startsWith('http')) {
+          item._coverImage = baseUrl + item.coverImage;
+        } else {
+          item._coverImage = item.coverImage;
+        }
+        if (!item._coverImage) item._coverImage = '/assets/images/default.png';
+      });
       this.setData({
         products: reset ? list : this.data.products.concat(list),
         pageNum,
