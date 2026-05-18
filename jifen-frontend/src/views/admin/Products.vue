@@ -79,8 +79,45 @@
             placeholder="请输入商品描述"
           />
         </el-form-item>
-        <el-form-item label="封面图URL" prop="coverImage">
-          <el-input v-model="form.coverImage" placeholder="请输入封面图片URL" />
+        <el-form-item label="封面图" prop="coverImage">
+          <div class="upload-wrapper">
+            <el-upload
+              ref="uploadRef"
+              action="http://localhost:8080/api/admin/upload"
+              :headers="uploadHeaders"
+              :show-file-list="false"
+              :before-upload="beforeUpload"
+              :on-success="onUploadSuccess"
+              :on-error="onUploadError"
+            >
+              <template #trigger>
+                <el-button type="primary" :loading="uploading">选择图片</el-button>
+              </template>
+              <template #tip>
+                <div class="el-upload__tip">支持 jpg/png/gif，不超过 5MB</div>
+              </template>
+            </el-upload>
+            <div v-if="form.coverImage" class="upload-preview">
+              <el-image
+                :src="form.coverImage"
+                style="width: 120px; height: 120px; border-radius: 4px; border: 1px solid #dcdfe6;"
+                fit="cover"
+                :preview-src-list="[form.coverImage]"
+                preview-teleported
+              >
+                <template #error>
+                  <div class="image-slot">
+                    <el-icon><PictureFilled /></el-icon>
+                    <span style="font-size: 12px; color: #909399;">加载失败</span>
+                  </div>
+                </template>
+              </el-image>
+              <el-button class="remove-image-btn" size="small" type="danger" circle @click="form.coverImage = ''">
+                <el-icon><Close /></el-icon>
+              </el-button>
+            </div>
+            <el-input v-model="form.coverImage" placeholder="或手动输入图片URL" style="margin-top: 8px;" />
+          </div>
         </el-form-item>
         <el-form-item label="所需积分" prop="pointsRequired">
           <el-input-number v-model="form.pointsRequired" :min="0" :max="999999" />
@@ -103,6 +140,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from 'element-plus'
+import { PictureFilled, Close } from '@element-plus/icons-vue'
 import {
   getAdminProducts,
   createAdminProduct,
@@ -127,6 +165,38 @@ const isEdit = ref(false)
 const editId = ref<number | null>(null)
 const saving = ref(false)
 const formRef = ref<FormInstance>()
+const uploadRef = ref(null)
+const uploading = ref(false)
+const uploadHeaders = { Authorization: 'Bearer ' + localStorage.getItem('token') }
+
+const beforeUpload = (file: File) => {
+  const validTypes = ['image/jpeg', 'image/png', 'image/gif']
+  if (!validTypes.includes(file.type)) {
+    ElMessage.error('仅支持 jpg/png/gif 格式')
+    return false
+  }
+  if (file.size / 1024 / 1024 > 5) {
+    ElMessage.error('图片大小不能超过 5MB')
+    return false
+  }
+  uploading.value = true
+  return true
+}
+
+const onUploadSuccess = (response: any, file: File, fileList: any) => {
+  uploading.value = false
+  if (response && (response.url || response.data?.url)) {
+    form.coverImage = response.url || response.data.url
+    ElMessage.success('图片上传成功')
+  } else {
+    ElMessage.error('上传响应格式异常')
+  }
+}
+
+const onUploadError = (err: any, file: File, fileList: any) => {
+  uploading.value = false
+  ElMessage.error('图片上传失败')
+}
 
 const form = reactive({
   name: '',
@@ -290,4 +360,9 @@ async function handleDelete(row: ProductItem) {
   display: flex;
   justify-content: flex-end;
 }
+
+.upload-wrapper { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.upload-preview { position: relative; display: inline-block; }
+.remove-image-btn { position: absolute; top: -8px; right: -8px; }
+.image-slot { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 120px; height: 120px; background: #f5f7fa; border-radius: 4px; }
 </style>
