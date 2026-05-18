@@ -75,12 +75,12 @@ Page({
       pageSize: PAGE_SIZE,
     }).then(data => {
       const list = data.list || data.records || [];
-      // 拼接完整图片 URL
-      const API_BASE = require('../../utils/config').default.API_BASE_URL;
-      const baseUrl = API_BASE.replace('/api', '');
+      // 拼接完整图片 URL - 从配置读取baseUrl
+      const apiBase = require('../../utils/config').default.API_BASE_URL || 'http://localhost:8080/api'
+      const imgBase = apiBase.replace('/api', '')
       list.forEach(item => {
         if (item.coverImage && !item.coverImage.startsWith('http')) {
-          item._coverImage = baseUrl + item.coverImage;
+          item._coverImage = imgBase + item.coverImage;
         } else {
           item._coverImage = item.coverImage;
         }
