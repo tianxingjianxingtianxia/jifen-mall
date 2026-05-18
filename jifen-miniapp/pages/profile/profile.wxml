@@ -1,0 +1,59 @@
+<nav-bar title="我的" showBack="{{false}}" />
+
+<view class="page-container" style="padding-top: calc(88rpx + env(safe-area-inset-top));">
+
+  <!-- 用户信息头部 -->
+  <view class="user-header">
+    <view class="user-avatar-wrap">
+      <image class="user-avatar" src="{{userInfo.avatarUrl || '/assets/images/default-avatar.png'}}" mode="aspectFill" />
+    </view>
+    <view class="user-info">
+      <text class="user-name">{{userInfo.nickName || '微信用户'}}</text>
+      <text class="user-points">积分余额：{{points}}</text>
+    </view>
+  </view>
+
+  <!-- 积分统计 -->
+  <view class="points-stats card">
+    <view class="stat-item">
+      <text class="stat-value">{{points}}</text>
+      <text class="stat-label">当前积分</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <text class="stat-value">{{userInfo.totalEarned || '-'}}</text>
+      <text class="stat-label">累计获得</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <text class="stat-value">{{userInfo.totalSpent || '-'}}</text>
+      <text class="stat-label">累计消耗</text>
+    </view>
+  </view>
+
+  <!-- 功能入口 -->
+  <view class="menu-list card">
+    <view class="menu-item" bindtap="goToOrders">
+      <text class="menu-icon">📋</text>
+      <text class="menu-label">我的订单</text>
+      <text class="menu-arrow">⟩</text>
+    </view>
+    <view class="menu-divider"></view>
+    <view class="menu-item" bindtap="goToPointsRecords">
+      <text class="menu-icon">⭐</text>
+      <text class="menu-label">积分明细</text>
+      <text class="menu-arrow">⟩</text>
+    </view>
+    <view class="menu-divider"></view>
+    <view class="menu-item" bindtap="goToAddresses">
+      <text class="menu-icon">📍</text>
+      <text class="menu-label">地址管理</text>
+      <text class="menu-arrow">⟩</text>
+    </view>
+  </view>
+
+  <!-- 退出登录 -->
+  <view class="logout-section">
+    <button class="logout-btn" bindtap="onLogout">退出登录</button>
+  </view>
+</view>

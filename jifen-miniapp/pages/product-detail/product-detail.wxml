@@ -1,0 +1,66 @@
+<nav-bar title="商品详情" />
+
+<scroll-view class="page-container" scroll-y enhanced show-scrollbar="{{false}}"
+  style="padding-top: calc(88rpx + env(safe-area-inset-top));">
+
+  <view wx:if="{{loading}}" class="loading-container">
+    <text>加载中...</text>
+  </view>
+
+  <view wx:elif="{{product}}">
+    <!-- 轮播图 -->
+    <swiper class="detail-swiper" indicator-dots autoplay circular interval="3000">
+      <swiper-item wx:for="{{product.images || [product.coverImage]}}" wx:key="*this">
+        <image class="swiper-img" src="{{item}}" mode="aspectFill" bindtap="onPreviewImage" data-index="{{index}}" />
+      </swiper-item>
+    </swiper>
+
+    <!-- 商品信息 -->
+    <view class="detail-info card">
+      <text class="detail-name">{{product.name}}</text>
+      <view class="detail-points-row">
+        <text class="detail-points">{{product.pointsRequired}} 积分</text>
+        <text class="detail-price" wx:if="{{product.price}}">¥{{product.price}}</text>
+      </view>
+      <view class="detail-meta">
+        <text>库存：{{product.stock}}</text>
+        <text>已售：{{product.saleCount || 0}}</text>
+      </view>
+    </view>
+
+    <!-- 商品描述 -->
+    <view class="detail-desc card" wx:if="{{product.description}}">
+      <view class="section-title">商品描述</view>
+      <text class="desc-content">{{product.description}}</text>
+    </view>
+
+    <!-- 收货地址 -->
+    <view class="address-section card" bindtap="onSelectAddress">
+      <view class="section-title">收货地址</view>
+      <view wx:if="{{selectedAddress}}" class="address-info">
+        <view class="address-name-phone">
+          <text class="address-name">{{selectedAddress.receiverName}}</text>
+          <text class="address-phone">{{selectedAddress.receiverPhone}}</text>
+          <text class="default-tag" wx:if="{{selectedAddress.isDefault}}">默认</text>
+        </view>
+        <text class="address-detail">
+          {{selectedAddress.province}}{{selectedAddress.city}}{{selectedAddress.district}}{{selectedAddress.detailAddress}}
+        </text>
+      </view>
+      <view wx:else class="address-empty">
+        <text>请选择收货地址</text>
+        <text class="arrow">⟩</text>
+      </view>
+    </view>
+
+    <!-- 兑换按钮 -->
+    <view class="exchange-bar">
+      <button class="btn-primary exchange-btn" disabled="{{product.stock < 1}}"
+        bindtap="onExchange">
+        {{product.stock < 1 ? '已售罄' : '立即兑换'}}
+      </button>
+    </view>
+  </view>
+
+  <empty-view wx:else text="商品不存在" />
+</scroll-view>

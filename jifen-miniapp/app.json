@@ -1,0 +1,48 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/product-detail/product-detail",
+    "pages/orders/orders",
+    "pages/order-detail/order-detail",
+    "pages/addresses/addresses",
+    "pages/address-edit/address-edit",
+    "pages/points-records/points-records",
+    "pages/profile/profile"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#667eea",
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "积分商城",
+    "backgroundColor": "#f5f7fa",
+    "backgroundTextStyle": "light",
+    "navigationStyle": "custom"
+  },
+  "tabBar": {
+    "color": "#909399",
+    "selectedColor": "#667eea",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "assets/icons/home.png",
+        "selectedIconPath": "assets/icons/home-active.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/orders/orders",
+        "iconPath": "assets/icons/orders.png",
+        "selectedIconPath": "assets/icons/orders-active.png",
+        "text": "订单"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "iconPath": "assets/icons/profile.png",
+        "selectedIconPath": "assets/icons/profile-active.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

@@ -1,0 +1,47 @@
+<nav-bar title="我的订单" showBack="{{false}}" />
+
+<view class="page-container" style="padding-top: calc(88rpx + env(safe-area-inset-top));">
+
+  <!-- Tab 导航 -->
+  <scroll-view class="tabs-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+    <view class="tabs-inner">
+      <view
+        wx:for="{{tabs}}"
+        wx:key="*this"
+        class="tab-item {{activeTab === index ? 'tab-active' : ''}}"
+        data-index="{{index}}"
+        bindtap="onTabChange"
+      >
+        <text>{{item}}</text>
+        <view class="tab-underline" wx:if="{{activeTab === index}}"></view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 订单列表 -->
+  <scroll-view scroll-y enhanced show-scrollbar="{{false}}"
+    bindscrolltolower="onReachBottom"
+    style="height: calc(100vh - 88rpx - env(safe-area-inset-top) - 88rpx);">
+
+    <view class="order-list" wx:if="{{orders.length > 0}}">
+      <order-card
+        wx:for="{{orders}}"
+        wx:key="id"
+        order="{{item}}"
+        bind:click="onOrderClick"
+        bind:cancel="onOrderCancel"
+        bind:confirm="onOrderConfirm"
+      />
+    </view>
+
+    <empty-state wx:elif="{{!loading}}" text="暂无订单" />
+
+    <!-- 加载更多 -->
+    <view class="load-more" wx:if="{{loading}}">
+      <text class="load-more-text">加载中...</text>
+    </view>
+    <view class="load-more" wx:elif="{{!hasMore && orders.length > 0}}">
+      <text class="load-more-text">— 没有更多了 —</text>
+    </view>
+  </scroll-view>
+</view>

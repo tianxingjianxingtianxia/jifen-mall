@@ -121,17 +121,11 @@ async function main() {
 
   // 检查积分卡片
   await sleep(1000)
-  const pointsText = await page.text('.points-card,.card,.points-header')
-  if (pointsText && (pointsText.includes('积分') || pointsText.includes('签到'))) {
-    ok('积分卡片渲染成功')
+  const cards = await page.$$('points-card')
+  if (cards.length > 0) {
+    ok(`积分卡片组件已渲染`)
   } else {
-    // 检查组件内部的文本
-    const cards = await page.$$('points-card')
-    if (cards.length > 0) {
-      ok('积分卡片组件已渲染')
-    } else {
-      fail('未找到积分卡片')
-    }
+    fail('未找到积分卡片')
   }
 
   // 检查商品列表

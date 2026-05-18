@@ -1,0 +1,11 @@
+# 微信开发者工具
+project.config.json.bak
+project.config.json.old
+
+# 临时文件
+node_modules/
+miniprogram_npm/
+
+# 系统
+.DS_Store
+Thumbs.db

@@ -1,0 +1,20 @@
+<!-- 订单卡片 -->
+<view class="order-card card" bindtap="onClick">
+  <view class="order-header flex-between">
+    <text class="order-no">订单号：{{order.orderNo}}</text>
+    <text class="order-status status-{{statusType}}">{{statusText}}</text>
+  </view>
+  <view class="order-body">
+    <image class="order-img" src="{{order.productImage || '/assets/images/default.png'}}" mode="aspectFill" />
+    <view class="order-info">
+      <text class="order-product-name text-ellipsis">{{order.productName}}</text>
+      <text class="order-points">消耗 <text class="points-num">{{order.pointsSpent}}</text> 积分</text>
+      <text class="order-time">{{createTime}}</text>
+    </view>
+  </view>
+  <view class="order-footer" wx:if="{{order.status === 0 || order.status === 1}}">
+    <button class="action-btn cancel" wx:if="{{order.status === 0}}" bindtap="onCancel">取消订单</button>
+    <button class="action-btn confirm" wx:if="{{order.status === 1}}" bindtap="onConfirm">确认收货</button>
+    <button class="action-btn default" bindtap="onClick">查看详情</button>
+  </view>
+</view>

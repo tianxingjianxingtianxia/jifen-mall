@@ -1,0 +1,26 @@
+<!-- 积分卡片 -->
+<view class="points-card">
+  <view class="points-header">
+    <view class="points-balance">
+      <text class="points-label">当前积分</text>
+      <text class="points-value">{{points}}</text>
+    </view>
+    <button class="sign-btn {{todaySigned ? 'signed' : ''}}" 
+            disabled="{{todaySigned || signing}}" 
+            loading="{{signing}}"
+            bindtap="onSignIn">
+      {{todaySigned ? '已签到' : '签到'}}
+    </button>
+  </view>
+  <view class="points-stats">
+    <view class="stat-item">
+      <text class="stat-value earn">{{totalEarned}}</text>
+      <text class="stat-label">累计获得</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <text class="stat-value spend">{{totalSpent}}</text>
+      <text class="stat-label">累计消耗</text>
+    </view>
+  </view>
+</view>
