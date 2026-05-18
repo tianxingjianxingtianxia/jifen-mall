@@ -39,7 +39,6 @@ public class OrderServiceImpl implements OrderService {
     private final PointRecordMapper pointRecordMapper;
 
     private static final int ORDER_EXPIRE_MINUTES = 15;
-    private static final int REPEAT_EXCHANGE_DAYS = 30;
 
     @Override
     @Transactional
@@ -56,19 +55,7 @@ public class OrderServiceImpl implements OrderService {
             throw new BusinessException("商品库存不足");
         }
 
-        // 2. 30天内重复兑换限制
-        LocalDateTime thirtyDaysAgo = LocalDateTime.now().minusDays(REPEAT_EXCHANGE_DAYS);
-        LambdaQueryWrapper<Order> repeatWrapper = Wrappers.lambdaQuery(Order.class)
-                .eq(Order::getUserId, userId)
-                .eq(Order::getProductId, request.getProductId())
-                .ne(Order::getStatus, 3) // 已取消的订单不算
-                .ge(Order::getCreateTime, thirtyDaysAgo);
-        Long repeatCount = orderMapper.selectCount(repeatWrapper);
-        if (repeatCount > 0) {
-            throw new BusinessException("同一商品30天内只能兑换1次");
-        }
-
-        // 3. 查询用户
+        // 2. 查询用户
         User user = userMapper.selectById(userId);
         if (user == null) {
             throw new BusinessException("用户不存在");
