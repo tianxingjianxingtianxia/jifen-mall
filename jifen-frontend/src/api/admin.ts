@@ -98,6 +98,9 @@ export const searchUsers = (params: { keyword?: string; pageNum?: number; pageSi
 export const adjustUserPoints = (userId: number, points: number, source: string, remark?: string) =>
   request.put(`/admin/users/${userId}/points`, { points, source, remark })
 
+export const toggleUserStatus = (userId: number) =>
+  request.put(`/admin/users/${userId}/status`)
+
 // ===== 积分有效期 =====
 export const getExpiredPoints = () =>
   request.get('/admin/expired-points')

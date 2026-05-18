@@ -26,6 +26,10 @@
           <el-icon><Coin /></el-icon>
           <span>积分管理</span>
         </el-menu-item>
+        <el-menu-item index="/admin/users">
+          <el-icon><User /></el-icon>
+          <span>用户管理</span>
+        </el-menu-item>
         <el-menu-item index="/admin/config">
           <el-icon><Setting /></el-icon>
           <span>系统配置</span>
@@ -63,6 +67,7 @@ import {
   Goods,
   List,
   Setting,
+  User,
   UserFilled
 } from '@element-plus/icons-vue'
 

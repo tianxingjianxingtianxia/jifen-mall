@@ -33,6 +33,7 @@ public interface AdminService {
     // === 客户积分管理 ===
     void adjustUserPoints(Long userId, int points, String source, String remark);
     PageResult<?> searchUsers(String keyword, int pageNum, int pageSize);
+    void toggleUserStatus(Long userId);
 
     // === 积分有效期 ===
     List<?> getExpiredPoints();

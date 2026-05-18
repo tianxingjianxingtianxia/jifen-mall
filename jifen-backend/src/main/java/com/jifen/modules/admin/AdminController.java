@@ -146,6 +146,13 @@ public class AdminController {
         return Result.success();
     }
 
+    @PutMapping("/users/{userId}/status")
+    public Result<Void> toggleUserStatus(@PathVariable Long userId) {
+        checkAdmin();
+        adminService.toggleUserStatus(userId);
+        return Result.success();
+    }
+
     // ===== 积分有效期 =====
 
     @GetMapping("/expired-points")

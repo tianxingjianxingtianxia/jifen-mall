@@ -369,7 +369,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public PageResult<?> searchUsers(String keyword, int pageNum, int pageSize) {
         LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery(User.class)
-                .eq(User::getStatus, 1);
+                .orderByDesc(User::getCreateTime);
 
         if (StrUtil.isNotBlank(keyword)) {
             wrapper.and(w -> w.like(User::getUsername, keyword)
@@ -387,9 +387,23 @@ public class AdminServiceImpl implements AdminService {
             m.put("points", u.getPoints() != null ? u.getPoints() : 0);
             m.put("totalEarned", u.getTotalEarned() != null ? u.getTotalEarned() : 0);
             m.put("totalSpent", u.getTotalSpent() != null ? u.getTotalSpent() : 0);
+            m.put("status", u.getStatus() != null ? u.getStatus() : 1);
+            m.put("createTime", u.getCreateTime() != null ? u.getCreateTime().toString() : "");
             return m;
         });
         return PageResult.of(voPage);
+    }
+
+    @Override
+    @Transactional
+    public void toggleUserStatus(Long userId) {
+        User user = userMapper.selectById(userId);
+        if (user == null) {
+            throw new BusinessException("用户不存在");
+        }
+        user.setStatus(user.getStatus() == 1 ? 0 : 1);
+        userMapper.updateById(user);
+        log.info("[ADMIN] 用户{}状态切换为{}", userId, user.getStatus());
     }
 
     // ===== 积分有效期 =====
