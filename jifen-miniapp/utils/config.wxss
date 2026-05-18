@@ -1,0 +1,16 @@
+// 样式变量
+$primary-start: #667eea;
+$primary-end: #764ba2;
+$success: #67c23a;
+$warning: #e6a23c;
+$danger: #f56c6c;
+$bg-color: #f5f7fa;
+$card-bg: #ffffff;
+$text-primary: #303133;
+$text-regular: #606266;
+$text-secondary: #909399;
+$border-color: #ebeef5;
+$radius-sm: 8rpx;
+$radius-md: 12rpx;
+$radius-lg: 20rpx;
+$shadow: 0 4rpx 12rpx rgba(0,0,0,0.06);

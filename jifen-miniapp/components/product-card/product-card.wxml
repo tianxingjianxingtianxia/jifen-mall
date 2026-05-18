@@ -1,0 +1,14 @@
+<!-- 商品卡片 -->
+<view class="product-card" bindtap="onClick">
+  <view class="product-img-wrap">
+    <image class="product-img" src="{{product.coverImage || '/assets/images/default.png'}}" mode="aspectFill" />
+    <view class="product-stock-tag" wx:if="{{product.stock < 1}}">已售罄</view>
+  </view>
+  <view class="product-info">
+    <text class="product-name text-ellipsis">{{product.name}}</text>
+    <view class="product-meta flex-between">
+      <text class="product-points">{{product.pointsRequired}} 积分</text>
+      <text class="product-sales">已售 {{product.saleCount || 0}}</text>
+    </view>
+  </view>
+</view>

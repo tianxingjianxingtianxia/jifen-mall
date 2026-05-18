@@ -1,0 +1,49 @@
+<nav-bar title="积分商城" showBack="{{false}}" />
+
+<scroll-view class="page-container" scroll-y enhanced show-scrollbar="{{false}}"
+  bindscrolltolower="onReachBottom"
+  style="padding-top: calc(88rpx + env(safe-area-inset-top));">
+
+  <!-- 积分卡片 + 签到 -->
+  <points-card
+    points="{{points}}"
+    totalEarned="{{totalEarned}}"
+    totalSpent="{{totalSpent}}"
+    todaySigned="{{todaySigned}}"
+    signing="{{signing}}"
+    bind:signin="onSignIn"
+  />
+
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <view class="search-input-wrap">
+      <input class="search-input" placeholder="搜索商品" value="{{keyword}}"
+        bindinput="onSearchInput" bindconfirm="onSearch" confirm-type="search" />
+    </view>
+    <picker mode="selector" range="{{sortOptions}}" range-key="label" value="{{sortIndex}}" bindchange="onSortChange">
+      <view class="sort-picker">
+        <text>{{sortOptions[sortIndex].label}}</text>
+        <text class="sort-arrow">▼</text>
+      </view>
+    </picker>
+  </view>
+
+  <!-- 商品网格 -->
+  <view class="product-grid" wx:if="{{products.length > 0}}">
+    <block wx:for="{{products}}" wx:key="id">
+      <view class="product-grid-item">
+        <product-card product="{{item}}" />
+      </view>
+    </block>
+  </view>
+
+  <empty-state wx:elif="{{!loading}}" text="暂无商品" />
+
+  <!-- 加载更多 -->
+  <view class="load-more" wx:if="{{loading}}">
+    <text class="load-more-text">加载中...</text>
+  </view>
+  <view class="load-more" wx:elif="{{!hasMore && products.length > 0}}">
+    <text class="load-more-text">— 没有更多了 —</text>
+  </view>
+</scroll-view>

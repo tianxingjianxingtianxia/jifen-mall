@@ -1,0 +1,40 @@
+<nav-bar title="收货地址" />
+
+<view class="page-container" style="padding-top: calc(88rpx + env(safe-area-inset-top));">
+
+  <view class="address-list" wx:if="{{addresses.length > 0}}">
+    <view class="address-card card" wx:for="{{addresses}}" wx:key="id">
+      <view class="address-info">
+        <view class="address-name-phone">
+          <text class="name">{{item.name}}</text>
+          <text class="phone">{{item.phone}}</text>
+          <text class="default-tag" wx:if="{{item.isDefault}}">默认</text>
+        </view>
+        <text class="address-detail">
+          {{item.province}}{{item.city}}{{item.district}}{{item.detailAddress}}
+        </text>
+      </view>
+      <view class="address-actions">
+        <view class="action-item" data-id="{{item.id}}" wx:if="{{!item.isDefault}}" bindtap="onSetDefault">
+          <text class="action-icon">★</text>
+          <text class="action-label">设为默认</text>
+        </view>
+        <view class="action-item" data-id="{{item.id}}" bindtap="onEdit">
+          <text class="action-icon">✎</text>
+          <text class="action-label">编辑</text>
+        </view>
+        <view class="action-item" data-id="{{item.id}}" bindtap="onDelete">
+          <text class="action-icon">✕</text>
+          <text class="action-label">删除</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <empty-state wx:elif="{{!loading}}" text="暂无收货地址" />
+
+  <!-- 底部新增按钮 -->
+  <view class="bottom-bar">
+    <button class="btn-primary add-btn" bindtap="onAdd">+ 新增地址</button>
+  </view>
+</view>
