@@ -24,6 +24,13 @@ Page({
     this.loadPoints();
   },
 
+  onShow() {
+    // 从地址编辑页返回时重新加载地址列表
+    if (this.data.product) {
+      this.loadAddresses();
+    }
+  },
+
   loadProduct(id) {
     this.setData({ loading: true });
     api.get('/products/' + id).then(data => {
@@ -61,7 +68,7 @@ Page({
       return;
     }
     const items = list.map(a => ({
-      name: a.name + ' ' + a.phone,
+      name: (a.receiverName || a.name) + ' ' + (a.receiverPhone || a.phone),
       address: (a.province || '') + (a.city || '') + (a.district || '') + (a.detailAddress || ''),
     }));
     wx.showActionSheet({

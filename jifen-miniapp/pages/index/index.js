@@ -35,7 +35,9 @@ Page({
   },
 
   onShow() {
+    this.loadProducts(true);
     this.loadPointsBalance();
+    this.loadTodaySign();
   },
 
   // 加载积分余额
