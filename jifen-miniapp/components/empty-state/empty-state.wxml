@@ -1,6 +1,0 @@
-<!-- 空状态 -->
-<view class="empty-state">
-  <image wx:if="{{icon}}" src="{{icon}}" mode="aspectFit" />
-  <image wx:else src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%23c0c4cc'%3E%3Crect x='20' y='30' width='60' height='50' rx='5'/%3E%3Ccircle cx='50' cy='55' r='15' fill='%23ebeef5'/%3E%3C/svg%3E" mode="aspectFit" />
-  <text class="empty-text">{{text}}</text>
-</view>
