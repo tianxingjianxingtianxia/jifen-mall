@@ -1,6 +1,6 @@
 import api from '../../utils/api';
 import config from '../../utils/config';
-import { showToast, showSuccess, showConfirm } from '../../utils/util';
+import { showToast, showSuccess } from '../../utils/util';
 
 const PAGE_SIZE = 10;
 
@@ -28,46 +28,35 @@ Page({
   },
 
   onLoad() {
+    // 从缓存读取用户信息
+    this.loadFromCache();
+    // 加载商品列表（不需要 token）
     this.loadProducts(true);
-    // 积分和签到在登录后加载
-    const token = wx.getStorageSync('token');
-    if (token) {
-      this.loadPointsBalance();
-      this.loadTodaySign();
-    }
   },
 
   onShow() {
+    // 每次显示时刷新
+    this.loadFromCache();
     this.loadProducts(true);
-    setTimeout(() => {
-      this.loadPointsBalance();
-      this.loadTodaySign();
-    }, 500);
   },
 
-  // 加载积分余额
-  loadPointsBalance() {
-    api.get('/points/balance').then(data => {
-      this.setData({
-        points: data.points,
-        totalEarned: data.totalEarned,
-        totalSpent: data.totalSpent,
-      });
-    }).catch(() => {});
+  loadFromCache() {
+    try {
+      const info = wx.getStorageSync('userInfo');
+      if (info) {
+        const u = typeof info === 'string' ? JSON.parse(info) : info;
+        this.setData({
+          nickname: u.nickname || u.username || '用户',
+          firstChar: (u.nickname || u.username || '用').substring(0, 1),
+          points: u.points || 0,
+        });
+      }
+    } catch (e) {}
   },
 
-  // 加载签到状态
-  loadTodaySign() {
-    api.get('/points/today-sign').then(data => {
-      this.setData({ todaySigned: data.signed });
-    }).catch(() => {});
-  },
-
-  // 加载商品列表
   loadProducts(reset = false) {
     if (this.data.loading) return;
     if (!reset && !this.data.hasMore) return;
-
     const pageNum = reset ? 1 : this.data.pageNum + 1;
     this.setData({ loading: true });
 
@@ -78,16 +67,6 @@ Page({
       pageSize: PAGE_SIZE,
     }).then(data => {
       const list = data.list || data.records || [];
-      // 拼接完整图片 URL
-      const imgBase = config.API_BASE_URL.replace('/api', '')
-      list.forEach(item => {
-        if (item.coverImage && !item.coverImage.startsWith('http')) {
-          item._coverImage = imgBase + item.coverImage;
-        } else {
-          item._coverImage = item.coverImage;
-        }
-        if (!item._coverImage) item._coverImage = '/assets/images/default.png';
-      });
       this.setData({
         products: reset ? list : this.data.products.concat(list),
         pageNum,
@@ -99,27 +78,18 @@ Page({
     });
   },
 
-  // 搜索
-  onSearchInput(e) {
-    this.setData({ keyword: e.detail.value });
-  },
+  onSearchInput(e) { this.setData({ keyword: e.detail.value }); },
+  onSearch() { this.loadProducts(true); },
 
-  onSearch() {
-    this.loadProducts(true);
-  },
-
-  // 跳转商品详情
   onGoDetail(e) {
     const id = e.currentTarget.dataset.id;
     wx.navigateTo({ url: '/pages/product-detail/product-detail?id=' + id });
   },
 
-  // 跳转个人中心
   onGoProfile() {
     wx.switchTab({ url: '/pages/profile/profile' });
   },
 
-  // 排序选择
   onSortChange(e) {
     const idx = e.detail.value;
     const sortBy = this.data.sortOptions[idx].value;
@@ -127,14 +97,15 @@ Page({
     this.loadProducts(true);
   },
 
-  // 签到
   onSignIn() {
     if (this.data.todaySigned || this.data.signing) return;
     this.setData({ signing: true });
     api.post('/points/sign-in').then(data => {
       showSuccess('签到成功 +' + (data.points || 0) + '积分');
-      this.setData({ todaySigned: true, points: this.data.points + (data.points || 0) });
-      this.loadPointsBalance();
+      this.setData({
+        todaySigned: true,
+        points: this.data.points + (data.points || 0)
+      });
     }).catch(err => {
       showToast(err.message || '签到失败');
     }).finally(() => {
@@ -142,8 +113,7 @@ Page({
     });
   },
 
-  // 触底加载
   onReachBottom() {
-    this.loadProducts();
-  },
+    this.loadProducts(false);
+  }
 });

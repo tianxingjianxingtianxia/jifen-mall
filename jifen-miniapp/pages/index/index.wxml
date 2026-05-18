@@ -63,7 +63,9 @@
   <!-- 商品网格 -->
   <view class="product-grid" wx:if="{{products.length > 0}}">
     <view class="product-item" wx:for="{{products}}" wx:key="id" data-id="{{item.id}}" bindtap="onGoDetail">
-      <image class="prod-img" src="{{item._coverImage || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='}}" mode="aspectFill" />
+      <view class="prod-img-placeholder">
+        <text class="prod-placeholder-text">{{item.name}}</text>
+      </view>
       <view class="prod-info">
         <text class="prod-name">{{item.name}}</text>
         <text class="prod-points">{{item.pointsRequired}} 积分</text>
