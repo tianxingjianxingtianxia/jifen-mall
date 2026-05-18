@@ -28,7 +28,7 @@ Page({
       }
     }
     // 尝试从接口获取最新
-    api.get('/user/info').then(data => {
+    api.get('/auth/userinfo').then(data => {
       const nick = data.nickname || data.username || '用户'
       this.setData({
         userInfo: data,
