@@ -2,7 +2,10 @@
   <div class="products-page">
     <div class="page-header">
       <h3 class="page-title">商品管理</h3>
-      <el-button type="primary" @click="openCreateDialog">新增商品</el-button>
+      <div class="page-header-actions">
+        <el-button type="success" @click="exportProducts">导出 CSV</el-button>
+        <el-button type="primary" @click="openCreateDialog">新增商品</el-button>
+      </div>
     </div>
 
     <!-- 搜索 -->
@@ -145,11 +148,12 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from 'element-plus'
 import { PictureFilled, Close } from '@element-plus/icons-vue'
 import {
-  getAdminProducts,
   createAdminProduct,
-  updateAdminProduct,
-  toggleProductStatus,
   deleteAdminProduct,
+  exportProductsCsv,
+  getAdminProducts,
+  toggleProductStatus,
+  updateAdminProduct,
   type ProductItem
 } from '../../api/admin'
 
@@ -262,6 +266,14 @@ function search() {
 function resetSearch() {
   searchForm.keyword = ''
   search()
+}
+
+function exportProducts() {
+  const params: any = {}
+  if (searchForm.keyword) {
+    params.keyword = searchForm.keyword
+  }
+  exportProductsCsv(params)
 }
 
 function resetForm() {
@@ -379,6 +391,11 @@ async function handleDelete(row: ProductItem) {
 
 .table-card {
   margin-bottom: 16px;
+}
+
+.page-header-actions {
+  display: flex;
+  gap: 10px;
 }
 
 .pagination-wrapper {

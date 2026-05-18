@@ -86,6 +86,12 @@ const routes: RouteRecordRaw[] = [
         meta: { title: '订单管理' }
       },
       {
+        path: 'points-manage',
+        name: 'AdminPointsManage',
+        component: () => import('../views/admin/PointsManage.vue'),
+        meta: { title: '积分管理' }
+      },
+      {
         path: 'config',
         name: 'AdminConfig',
         component: () => import('../views/admin/Config.vue'),

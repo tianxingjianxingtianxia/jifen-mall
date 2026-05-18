@@ -25,28 +25,34 @@ async def screenshot(page, name):
 
 # ===== API 辅助函数 =====
 def api_get(path, token=None):
-    h = []
-    if token: h += ["-H", "Authorization: Bearer " + token]
-    return json.loads(subprocess.run(["curl", "-s", API + path] + h, capture_output=True, text=True).stdout)
+    cmd = ["curl", "-s", API + path]
+    if token:
+        cmd += ["-H", "Authorization: Bearer " + token]
+    return json.loads(subprocess.run(cmd, capture_output=True, text=True).stdout)
 
 def api_post(path, data=None, token=None):
-    h = ["-H", "Content-Type: application/json"]
-    if token: h += ["-H", "Authorization: Bearer " + token]
-    cmd = ["curl", "-s", "-X", "POST", API + path] + h
-    if data: cmd += ["-d", json.dumps(data)]
+    cmd = ["curl", "-s", "-X", "POST", API + path]
+    cmd += ["-H", "Content-Type: application/json"]
+    if token:
+        cmd += ["-H", "Authorization: Bearer " + token]
+    if data:
+        cmd += ["-d", json.dumps(data)]
     return json.loads(subprocess.run(cmd, capture_output=True, text=True).stdout)
 
 def api_put(path, data=None, token=None):
-    h = ["-H", "Content-Type: application/json"]
-    if token: h += ["-H", "Authorization: Bearer " + token]
-    cmd = ["curl", "-s", "-X", "PUT", API + path] + h
-    if data: cmd += ["-d", json.dumps(data)]
+    cmd = ["curl", "-s", "-X", "PUT", API + path]
+    cmd += ["-H", "Content-Type: application/json"]
+    if token:
+        cmd += ["-H", "Authorization: Bearer " + token]
+    if data:
+        cmd += ["-d", json.dumps(data)]
     return json.loads(subprocess.run(cmd, capture_output=True, text=True).stdout)
 
 def api_delete(path, token=None):
-    h = []
-    if token: h += ["-H", "Authorization: Bearer " + token]
-    return json.loads(subprocess.run(["curl", "-s", "-X", "DELETE", API + path] + h, capture_output=True, text=True).stdout)
+    cmd = ["curl", "-s", "-X", "DELETE", API + path]
+    if token:
+        cmd += ["-H", "Authorization: Bearer " + token]
+    return json.loads(subprocess.run(cmd, capture_output=True, text=True).stdout)
 
 async def main():
     # ===== 1. 普通用户流程 =====

@@ -51,6 +51,7 @@ const labelMap: Record<string, string> = {
   dailySignInLimit: '每日签到次数限制',
   orderTimeoutMinutes: '订单超时时间（分钟）',
   maxProductsPerPage: '每页最大商品数',
+  pointsValidityDays: '积分有效期（天）',
   systemNotice: '系统公告',
   contactPhone: '客服电话',
   contactEmail: '客服邮箱'

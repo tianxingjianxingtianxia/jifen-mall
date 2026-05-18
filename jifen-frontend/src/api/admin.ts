@@ -72,3 +72,35 @@ export const updateAdminConfig = (data: Record<string, string>) =>
 // 统计看板
 export const getAdminDashboard = () =>
   request.get<DashboardVO>('/admin/dashboard')
+
+// ===== 数据导出 =====
+export const exportOrdersCsv = (params?: { status?: number; orderNo?: string }) => {
+  const token = localStorage.getItem('token')
+  let url = '/api/admin/orders/export?'
+  if (params) {
+    if (params.status !== undefined) url += `status=${params.status}&`
+    if (params.orderNo) url += `orderNo=${encodeURIComponent(params.orderNo)}&`
+  }
+  window.open(url + `token=${token}`, '_blank')
+}
+
+export const exportProductsCsv = (params?: { keyword?: string }) => {
+  const token = localStorage.getItem('token')
+  let url = '/api/admin/products/export?'
+  if (params?.keyword) url += `keyword=${encodeURIComponent(params.keyword)}&`
+  window.open(url + `token=${token}`, '_blank')
+}
+
+// ===== 客户积分管理 =====
+export const searchUsers = (params: { keyword?: string; pageNum?: number; pageSize?: number }) =>
+  request.get('/admin/users', { params })
+
+export const adjustUserPoints = (userId: number, points: number, source: string, remark?: string) =>
+  request.put(`/admin/users/${userId}/points`, { points, source, remark })
+
+// ===== 积分有效期 =====
+export const getExpiredPoints = () =>
+  request.get('/admin/expired-points')
+
+export const cleanExpiredPoints = () =>
+  request.post('/admin/points/clean-expired')

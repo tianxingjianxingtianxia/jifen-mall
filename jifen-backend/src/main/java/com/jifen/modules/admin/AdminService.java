@@ -4,6 +4,8 @@ import com.jifen.common.PageResult;
 import com.jifen.modules.admin.dto.*;
 import com.jifen.modules.order.dto.OrderVO;
 
+import java.util.List;
+
 public interface AdminService {
 
     // 商品管理
@@ -23,4 +25,16 @@ public interface AdminService {
 
     // 统计
     DashboardVO getDashboard();
+
+    // === 导出 ===
+    List<?> exportOrders(OrderPageRequest request);
+    List<?> exportProducts(ProductPageRequest request);
+
+    // === 客户积分管理 ===
+    void adjustUserPoints(Long userId, int points, String source, String remark);
+    PageResult<?> searchUsers(String keyword, int pageNum, int pageSize);
+
+    // === 积分有效期 ===
+    List<?> getExpiredPoints();
+    void cleanExpiredPoints();
 }

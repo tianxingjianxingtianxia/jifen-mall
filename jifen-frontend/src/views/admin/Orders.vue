@@ -2,6 +2,7 @@
   <div class="orders-page">
     <div class="page-header">
       <h3 class="page-title">订单管理</h3>
+      <el-button type="success" @click="exportOrders">导出 CSV</el-button>
     </div>
 
     <!-- 状态筛选 Tabs -->
@@ -88,11 +89,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
-import {
-  getAdminOrders,
-  shipOrder,
-  type OrderItem
-} from '../../api/admin'
+import { exportOrdersCsv, getAdminOrders, shipOrder, type OrderItem } from '../../api/admin'
 
 const orders = ref<OrderItem[]>([])
 const loading = ref(false)
@@ -175,6 +172,17 @@ function openShipDialog(row: OrderItem) {
   currentOrderId.value = row.id
   shipForm.trackingNo = ''
   shipDialogVisible.value = true
+}
+
+function exportOrders() {
+  const params: any = {}
+  if (activeTab.value !== 'all') {
+    params.status = Number(activeTab.value)
+  }
+  if (searchForm.orderNo) {
+    params.orderNo = searchForm.orderNo
+  }
+  exportOrdersCsv(params)
 }
 
 async function handleShip() {

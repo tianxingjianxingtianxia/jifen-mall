@@ -22,6 +22,10 @@
           <el-icon><List /></el-icon>
           <span>订单管理</span>
         </el-menu-item>
+        <el-menu-item index="/admin/points-manage">
+          <el-icon><Coin /></el-icon>
+          <span>积分管理</span>
+        </el-menu-item>
         <el-menu-item index="/admin/config">
           <el-icon><Setting /></el-icon>
           <span>系统配置</span>
@@ -54,6 +58,7 @@ import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessageBox } from 'element-plus'
 import {
+  Coin,
   DataAnalysis,
   Goods,
   List,

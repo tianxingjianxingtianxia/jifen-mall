@@ -11,4 +11,5 @@ public class PointRecordVO {
     private String source;
     private String remark;
     private LocalDateTime createTime;
+    private LocalDateTime expireTime;
 }
