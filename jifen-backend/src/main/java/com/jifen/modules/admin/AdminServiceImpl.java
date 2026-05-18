@@ -207,8 +207,14 @@ public class AdminServiceImpl implements AdminService {
     public Object getConfig() {
         List<SysConfig> list = sysConfigMapper.selectList(null);
         Map<String, String> configMap = new LinkedHashMap<>();
+        // 只返回前端需要的配置项（不暴露内部key）
+        java.util.Set<String> allowedKeys = new java.util.HashSet<>(java.util.Arrays.asList(
+                "sign_in_points", "points_validity_days"
+        ));
         for (SysConfig c : list) {
-            configMap.put(c.getConfigKey(), c.getConfigValue());
+            if (allowedKeys.contains(c.getConfigKey())) {
+                configMap.put(c.getConfigKey(), c.getConfigValue());
+            }
         }
         return configMap;
     }
