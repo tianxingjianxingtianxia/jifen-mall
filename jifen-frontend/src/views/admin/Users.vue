@@ -38,8 +38,15 @@
           </template>
         </el-table-column>
         <el-table-column prop="createTime" label="注册时间" width="170" />
-        <el-table-column label="操作" width="160" fixed="right">
+        <el-table-column label="操作" width="220" fixed="right">
           <template #default="{ row }">
+            <el-button
+              size="small"
+              type="primary"
+              @click="openAdjustDialog(row)"
+            >
+              调整积分
+            </el-button>
             <el-button
               size="small"
               :type="row.status === 1 ? 'warning' : 'success'"
@@ -61,13 +68,58 @@
         />
       </div>
     </el-card>
+
+    <!-- 调整积分对话框 -->
+    <el-dialog
+      v-model="adjustDialogVisible"
+      title="调整积分"
+      width="420px"
+      :close-on-click-modal="false"
+    >
+      <el-form label-width="90px">
+        <el-form-item label="当前积分">
+          <span style="font-size: 18px; font-weight: 600; color: #409eff">{{ currentPoints }}</span>
+        </el-form-item>
+        <el-form-item label="增减积分" required>
+          <el-input-number
+            v-model="adjustForm.points"
+            :min="-999999"
+            :max="999999"
+            placeholder="正数增加，负数扣减"
+            style="width: 100%"
+          />
+          <div style="font-size: 12px; color: #909399; margin-top: 4px">正数增加积分，负数扣减积分</div>
+        </el-form-item>
+        <el-form-item label="来源" required>
+          <el-select v-model="adjustForm.source" style="width: 100%">
+            <el-option label="转介绍签约" value="转介绍签约" />
+            <el-option label="售后回访" value="售后回访" />
+            <el-option label="手动调整" value="手动调整" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input
+            v-model="adjustForm.remark"
+            type="textarea"
+            :rows="3"
+            placeholder="可选填写备注信息"
+          />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="adjustDialogVisible = false">取消</el-button>
+        <el-button type="primary" :loading="adjusting" @click="handleAdjustPoints">
+          确认调整
+        </el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { searchUsers, toggleUserStatus } from '../../api/admin'
+import { searchUsers, toggleUserStatus, adjustUserPoints } from '../../api/admin'
 
 interface UserItem {
   id: number
@@ -136,6 +188,50 @@ async function handleToggleStatus(row: UserItem) {
     if (e !== 'cancel') {
       ElMessage.error(e.message || `${action}失败`)
     }
+  }
+}
+
+// ===== 调整积分对话框 =====
+const adjustDialogVisible = ref(false)
+const adjustUserId = ref<number | null>(null)
+const currentPoints = ref(0)
+const adjustForm = reactive({
+  points: 0,
+  source: '手动调整',
+  remark: ''
+})
+const adjusting = ref(false)
+
+function openAdjustDialog(row: UserItem) {
+  adjustUserId.value = row.id
+  currentPoints.value = row.points
+  adjustForm.points = 0
+  adjustForm.source = '手动调整'
+  adjustForm.remark = ''
+  adjustDialogVisible.value = true
+}
+
+async function handleAdjustPoints() {
+  if (adjustUserId.value === null) return
+  if (adjustForm.points === 0) {
+    ElMessage.warning('请输入增减积分数值')
+    return
+  }
+  adjusting.value = true
+  try {
+    await adjustUserPoints(
+      adjustUserId.value,
+      adjustForm.points,
+      adjustForm.source,
+      adjustForm.remark || undefined
+    )
+    ElMessage.success('积分调整成功')
+    adjustDialogVisible.value = false
+    search()
+  } catch (e: any) {
+    ElMessage.error('积分调整失败：' + (e.message || '未知错误'))
+  } finally {
+    adjusting.value = false
   }
 }
 </script>
