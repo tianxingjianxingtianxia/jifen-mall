@@ -14,6 +14,7 @@ public class User extends BaseEntity {
     private String nickname;
     private String phone;
     private String avatar;
+    private String openid;
     private Integer points = 0;
     private Integer totalEarned = 0;
     private Integer totalSpent = 0;

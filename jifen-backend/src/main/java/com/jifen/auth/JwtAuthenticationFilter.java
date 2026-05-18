@@ -21,6 +21,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String[] PUBLIC_PATHS = {
         "/auth/login", "/auth/register",
         "/auth/admin/login",
+        "/auth/wx-login",
         "/products", "/products/"
     };
 

@@ -131,4 +131,58 @@ public class AuthServiceImpl implements AuthService {
         response.setPoints(user.getPoints());
         return response;
     }
+
+    @Override
+    @Transactional
+    public LoginResponse wxLogin(String code) {
+        // 开发模式：不用真正的微信 API，直接用 code 作为标识
+        // 生产环境需要替换为真正的微信 code2session 调用
+        String openId;
+        String nickName;
+        String avatar;
+
+        if ("test_code".equals(code)) {
+            // 测试模式：创建或查找测试用户
+            openId = "test_openid_" + System.currentTimeMillis();
+            nickName = "微信用户";
+            avatar = "";
+        } else {
+            // 生产模式需要调用微信接口：
+            // https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=CODE&grant_type=authorization_code
+            // 这里简化处理：用 code 作为模拟 openId
+            openId = "wx_" + code;
+            nickName = "微信用户";
+            avatar = "";
+        }
+
+        // 查找是否已有该 openId
+        User user = userMapper.selectByOpenId(openId);
+
+        if (user == null) {
+            // 新用户，自动注册
+            user = new User();
+            user.setUsername("wx_" + System.currentTimeMillis());
+            user.setPassword("");
+            user.setNickname(nickName);
+            user.setAvatar(avatar);
+            user.setPoints(0);
+            user.setTotalEarned(0);
+            user.setTotalSpent(0);
+            user.setStatus(1);
+            user.setOpenid(openId);
+            userMapper.insert(user);
+        }
+
+        // 生成 token
+        String token = jwtUtil.generateToken(user.getId(), user.getUsername(), false);
+
+        LoginResponse response = new LoginResponse();
+        response.setToken(token);
+        response.setUserId(user.getId());
+        response.setUsername(user.getUsername());
+        response.setNickname(user.getNickname());
+        response.setAvatar(user.getAvatar());
+        response.setPoints(user.getPoints());
+        return response;
+    }
 }
