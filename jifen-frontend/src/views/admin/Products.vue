@@ -17,6 +17,7 @@
         <el-form-item>
           <el-button type="primary" @click="search">搜索</el-button>
           <el-button @click="resetSearch">重置</el-button>
+          <el-button @click="exportCSV">导出</el-button>
         </el-form-item>
       </el-form>
     </el-card>

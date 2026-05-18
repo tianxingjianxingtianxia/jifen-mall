@@ -46,14 +46,14 @@ const saving = ref(false)
 const config = reactive<Record<string, string>>({})
 
 const labelMap: Record<string, string> = {
-  signInPoints: '签到奖励积分',
-  exchangeRate: '兑换比例（积分:元）',
-  dailySignInLimit: '每日签到次数限制',
-  orderTimeoutMinutes: '订单超时时间（分钟）',
-  maxProductsPerPage: '每页最大商品数',
-  pointsValidityDays: '积分有效期（天）',
-  systemNotice: '系统公告',
-  contactPhone: '客服电话',
+  signInPoints: '每日签到奖励积分',
+  exchangeRate: '积分兑换比例（多少积分兑换1元）',
+  dailySignInLimit: '每日最多签到次数',
+  orderTimeoutMinutes: '未付款订单自动取消时间（分钟）',
+  maxProductsPerPage: '商品列表每页显示数量',
+  pointsValidityDays: '积分有效期天数（过期后积分不可用）',
+  systemNotice: '系统公告（显示在首页顶部）',
+  contactPhone: '客服联系电话',
   contactEmail: '客服邮箱'
 }
 

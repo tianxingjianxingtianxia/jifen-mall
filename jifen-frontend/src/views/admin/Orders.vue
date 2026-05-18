@@ -16,12 +16,13 @@
       </el-tabs>
 
       <el-form :inline="true" :model="searchForm" class="search-form">
-        <el-form-item label="订单号">
+        <el-form-item>
           <el-input v-model="searchForm.orderNo" placeholder="搜索订单号" clearable @keyup.enter="search" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="search">搜索</el-button>
           <el-button @click="resetSearch">重置</el-button>
+          <el-button @click="exportCSV">导出</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -172,6 +173,11 @@ function openShipDialog(row: OrderItem) {
   currentOrderId.value = row.id
   shipForm.trackingNo = ''
   shipDialogVisible.value = true
+}
+
+function exportCSV() {
+  const token = localStorage.getItem('token')
+  window.open('/api/admin/orders/export?token=' + token, '_blank')
 }
 
 function exportOrders() {
