@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
+import { ArrowLeft, User } from '@element-plus/icons-vue'
 import { getOrders, cancelOrder, confirmReceipt, STATUS_MAP } from '../api/orders'
 import type { OrderVO } from '../api/orders'
 import { useUserStore } from '../stores/user'
@@ -72,13 +74,35 @@ const goToDetail = (id: number) => {
 const canCancel = (order: OrderVO) => order.status === 0
 const canConfirm = (order: OrderVO) => order.status === 1
 
+function goBack() {
+  router.back()
+}
+
+function handleLogout() {
+  userStore.logout()
+  ElMessage.success('已退出登录')
+  router.push('/login')
+}
+
 onMounted(fetchOrders)
 </script>
 
 <template>
   <div class="orders-page">
-    <div class="header">
-      <h2>我的订单</h2>
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <el-button text @click="goBack">
+          <el-icon><ArrowLeft /></el-icon> 返回
+        </el-button>
+        <h2>我的订单</h2>
+      </div>
+      <div class="top-bar-right">
+        <span class="user-info">
+          <el-icon><User /></el-icon>
+          {{ userStore.nickname || userStore.userInfo?.username }}
+        </span>
+        <el-button text type="danger" @click="handleLogout">退出登录</el-button>
+      </div>
     </div>
 
     <el-tabs :model-value="activeStatus" @tab-change="onTabChange">
@@ -133,11 +157,35 @@ onMounted(fetchOrders)
   margin: 0 auto;
   padding: 20px;
 }
-.header {
+.top-bar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  justify-content: space-between;
+  background: #fff;
+  border-bottom: 1px solid #ebeef5;
+  padding: 12px 24px;
+  margin: -20px -20px 20px;
+}
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.top-bar-left h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #606266;
 }
 .order-card {
   background: #fff;

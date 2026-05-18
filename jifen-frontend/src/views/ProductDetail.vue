@@ -1,21 +1,21 @@
 <template>
   <div class="product-detail-page">
     <!-- 顶部导航 -->
-    <header class="header">
-      <div class="header-inner">
+    <div class="top-bar">
+      <div class="top-bar-left">
         <el-button text @click="goBack">
           <el-icon><ArrowLeft /></el-icon> 返回
         </el-button>
-        <h1 class="header-title">商品详情</h1>
-        <div class="header-right">
-          <span class="user-info">
-            <el-icon><User /></el-icon>
-            {{ userStore.nickname }}
-          </span>
-          <el-button text type="danger" @click="handleLogout">退出</el-button>
-        </div>
+        <h2>商品详情</h2>
       </div>
-    </header>
+      <div class="top-bar-right">
+        <span class="user-info">
+          <el-icon><User /></el-icon>
+          {{ userStore.nickname || userStore.userInfo?.username }}
+        </span>
+        <el-button text type="danger" @click="handleLogout">退出登录</el-button>
+      </div>
+    </div>
 
     <div class="page-container">
       <div v-if="loading" class="loading-wrapper">
@@ -253,42 +253,34 @@ function handleLogout() {
 </script>
 
 <style scoped>
-.header {
-  background: #fff;
-  border-bottom: 1px solid #ebeef5;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.header-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  height: 60px;
+.top-bar {
   display: flex;
   align-items: center;
-  gap: 16px;
+  justify-content: space-between;
+  background: #fff;
+  border-bottom: 1px solid #ebeef5;
+  padding: 12px 24px;
+  margin: -20px -20px 20px;
 }
-
-.header-title {
-  flex: 1;
-  font-size: 18px;
-  font-weight: 500;
-  color: #303133;
-}
-
-.header-right {
+.top-bar-left {
   display: flex;
   align-items: center;
   gap: 12px;
 }
-
+.top-bar-left h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
 .user-info {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 14px;
   color: #606266;
 }
 

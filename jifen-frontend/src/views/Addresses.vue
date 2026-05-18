@@ -1,17 +1,24 @@
 <template>
   <div class="addresses-page">
     <!-- 顶部导航 -->
-    <header class="header">
-      <div class="header-inner">
+    <div class="top-bar">
+      <div class="top-bar-left">
         <el-button text @click="goBack">
           <el-icon><ArrowLeft /></el-icon> 返回
         </el-button>
-        <h1 class="header-title">地址管理</h1>
+        <h2>地址管理</h2>
+      </div>
+      <div class="top-bar-right">
+        <span class="user-info">
+          <el-icon><User /></el-icon>
+          {{ userStore.nickname || userStore.userInfo?.username }}
+        </span>
         <el-button type="primary" :icon="Plus" @click="openAddDialog">
           新增地址
         </el-button>
+        <el-button text type="danger" @click="handleLogout">退出登录</el-button>
       </div>
-    </header>
+    </div>
 
     <div class="page-container">
       <!-- 地址列表 -->
@@ -141,7 +148,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
-import { ArrowLeft, Plus } from '@element-plus/icons-vue'
+import { ArrowLeft, Plus, User } from '@element-plus/icons-vue'
 import { useUserStore } from '../stores/user'
 import {
   getAddresses,
@@ -286,29 +293,35 @@ function handleLogout() {
 </script>
 
 <style scoped>
-.header {
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   background: #fff;
   border-bottom: 1px solid #ebeef5;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  padding: 12px 24px;
+  margin: -20px -20px 20px;
 }
-
-.header-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  height: 60px;
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.top-bar-left h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+.top-bar-right {
   display: flex;
   align-items: center;
   gap: 16px;
 }
-
-.header-title {
-  flex: 1;
-  font-size: 18px;
-  font-weight: 500;
-  color: #303133;
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #606266;
 }
 
 /* 地址列表 */
