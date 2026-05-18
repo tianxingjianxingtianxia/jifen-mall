@@ -167,8 +167,8 @@ async def main():
         print("\n[2.1] 管理后台登录")
         await page.goto("http://localhost:3000/#/admin/login", wait_until="load")
         await asyncio.sleep(1)
-        await page.fill('input[placeholder*="用户"],input[type="text"]', "admin")
-        await page.fill('input[placeholder*="密码"],input[type="password"]', "admin123")
+        await page.locator("input.el-input__inner").nth(0).fill("admin")
+        await page.locator("input.el-input__inner").nth(1).fill("admin123")
         await page.click("button:has-text('登录')")
         await asyncio.sleep(3)
         check("数据看板", await page.is_visible("text=数据看板") or "dashboard" in page.url)
@@ -227,24 +227,30 @@ async def main():
         r = api_get("/admin/dashboard", token)
         check("非管理员拒绝", r["code"]!=200)
 
-        # 文件上传
-        print("\n[3.2] 文件上传")
-        subprocess.run(["python3","-c","with open('/tmp/e2e_upload.png','wb') as f: f.write(b'\\x89PNG\\r\\n\\x1a\\n'+b'\\x00'*100)"], capture_output=True)
-        r_cmd = subprocess.run(["curl","-s","-X","POST",API+"/admin/upload",
-            "-H","Authorization: Bearer "+adm_token,
-            "-F","file=@/tmp/e2e_upload.png"], capture_output=True, text=True)
-        r = json.loads(r_cmd.stdout) if r_cmd.stdout else {}
-        upload_ok = r.get("code")==200
-        check("图片上传", upload_ok)
-        if upload_ok:
-            url = r["data"]
-            # 如果返回的是完整URL则直接用，否则拼完整
-            if url.startswith("http"):
-                check_url = url
+        # 3.2 文件上传（浏览器端）
+        print("\n[3.2] 文件上传（浏览器端）")
+        # 进入商品管理页，打开新增弹窗，通过el-upload上传
+        await page.goto("http://localhost:3000/#/admin/products", wait_until="networkidle")
+        await asyncio.sleep(1)
+        # 点"新增商品"打开弹窗
+        if await page.is_visible("button:has-text('新增商品')"):
+            await page.click("button:has-text('新增商品')")
+            await asyncio.sleep(1)
+            # 找到el-upload内部的隐藏input[type=file]
+            file_input = page.locator(".el-upload input[type=file]")
+            if await file_input.count() > 0:
+                # 创建测试图片
+                subprocess.run(["python3","-c","with open('/tmp/e2e_browser_upload.png','wb') as f: f.write(b'\\x89PNG\\r\\n\\x1a\\n'+b'\\x00'*500)"], capture_output=True)
+                await file_input.set_input_files("/tmp/e2e_browser_upload.png")
+                await asyncio.sleep(3)
+                # 上传成功后封面图预览应该出现
+                preview_visible = await page.is_visible(".upload-preview .el-image")
+                check("浏览器上传图片", preview_visible)
+                await screenshot(page, "05-upload.png")
             else:
-                check_url = "http://localhost:8080" + url
-            r2 = subprocess.run(["curl","-s","-o","/dev/null","-w","%{http_code}", check_url], capture_output=True, text=True)
-            check("上传文件可访问", r2.stdout=="200")
+                check("浏览器上传图片", False, "未找到文件上传input")
+        else:
+            check("浏览器上传图片", False, "新增商品按钮不可见")
 
         await browser.close()
 
