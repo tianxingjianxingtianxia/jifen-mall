@@ -2,6 +2,8 @@ package com.jifen.modules.admin.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class ProductFormRequest {
     private String name;
@@ -10,4 +12,5 @@ public class ProductFormRequest {
     private Integer pointsRequired;
     private Integer stock;
     private Integer sortOrder;
+    private List<String> images;
 }

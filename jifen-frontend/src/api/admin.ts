@@ -12,6 +12,7 @@ export interface ProductItem {
   saleCount: number
   createTime: string
   updateTime: string
+  images?: string[]
 }
 
 export interface OrderItem {

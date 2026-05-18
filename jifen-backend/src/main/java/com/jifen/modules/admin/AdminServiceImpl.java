@@ -16,6 +16,8 @@ import com.jifen.modules.order.OrderServiceImpl;
 import com.jifen.modules.order.dto.OrderVO;
 import com.jifen.modules.points.*;
 import com.jifen.modules.product.Product;
+import com.jifen.modules.product.ProductImage;
+import com.jifen.modules.product.ProductImageMapper;
 import com.jifen.modules.product.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +41,7 @@ public class AdminServiceImpl implements AdminService {
     private final PointSignInMapper pointSignInMapper;
     private final PointRecordMapper pointRecordMapper;
     private final OrderServiceImpl orderService; // 用于订单VO转换
+    private final ProductImageMapper productImageMapper;
 
     // ===== 商品管理 =====
 
@@ -70,6 +73,13 @@ public class AdminServiceImpl implements AdminService {
             m.put("saleCount", p.getSaleCount());
             m.put("createTime", p.getCreateTime());
             m.put("updateTime", p.getUpdateTime());
+            // 查询商品图片列表
+            List<ProductImage> imgs = productImageMapper.selectList(
+                    Wrappers.lambdaQuery(ProductImage.class)
+                            .eq(ProductImage::getProductId, p.getId())
+                            .orderByAsc(ProductImage::getSortOrder));
+            List<String> imgUrls = imgs.stream().map(ProductImage::getImageUrl).collect(Collectors.toList());
+            m.put("images", imgUrls);
             return m;
         });
         return PageResult.of(voPage);
@@ -88,6 +98,10 @@ public class AdminServiceImpl implements AdminService {
         product.setSortOrder(request.getSortOrder() != null ? request.getSortOrder() : 0);
         product.setSaleCount(0);
         productMapper.insert(product);
+
+        // 保存多图片
+        saveProductImages(product.getId(), request.getImages());
+
         return product.getId();
     }
 
@@ -105,7 +119,29 @@ public class AdminServiceImpl implements AdminService {
         product.setStock(request.getStock());
         product.setSortOrder(request.getSortOrder() != null ? request.getSortOrder() : product.getSortOrder());
         productMapper.updateById(product);
+
+        // 先删除旧图片，再插入新图片
+        productImageMapper.delete(Wrappers.lambdaQuery(ProductImage.class)
+                .eq(ProductImage::getProductId, id));
+        saveProductImages(id, request.getImages());
+
         return product.getId();
+    }
+
+    /**
+     * 保存商品多图片
+     */
+    private void saveProductImages(Long productId, List<String> images) {
+        if (images == null || images.isEmpty()) {
+            return;
+        }
+        for (int i = 0; i < images.size(); i++) {
+            ProductImage pi = new ProductImage();
+            pi.setProductId(productId);
+            pi.setImageUrl(images.get(i));
+            pi.setSortOrder(i);
+            productImageMapper.insert(pi);
+        }
     }
 
     @Override

@@ -79,44 +79,48 @@
             placeholder="请输入商品描述"
           />
         </el-form-item>
-        <el-form-item label="封面图" prop="coverImage">
+        <el-form-item label="商品图片" prop="coverImage">
           <div class="upload-wrapper">
+            <!-- 多图片上传区域 -->
             <el-upload
               ref="uploadRef"
               action="http://localhost:8080/api/admin/upload"
               :headers="uploadHeaders"
               :show-file-list="false"
+              multiple
               :before-upload="beforeUpload"
               :on-success="onUploadSuccess"
               :on-error="onUploadError"
             >
               <template #trigger>
-                <el-button type="primary" :loading="uploading">选择图片</el-button>
+                <el-button type="primary" :loading="uploading">选择图片（可多选）</el-button>
               </template>
               <template #tip>
-                <div class="el-upload__tip">支持 jpg/png/gif，不超过 5MB</div>
+                <div class="el-upload__tip">支持 jpg/png/gif，不超过 5MB，可多选</div>
               </template>
             </el-upload>
-            <div v-if="form.coverImage" class="upload-preview">
-              <el-image
-                :src="form.coverImage"
-                style="width: 120px; height: 120px; border-radius: 4px; border: 1px solid #dcdfe6;"
-                fit="cover"
-                :preview-src-list="[form.coverImage]"
-                preview-teleported
-              >
-                <template #error>
-                  <div class="image-slot">
-                    <el-icon><PictureFilled /></el-icon>
-                    <span style="font-size: 12px; color: #909399;">加载失败</span>
-                  </div>
-                </template>
-              </el-image>
-              <el-button class="remove-image-btn" size="small" type="danger" circle @click="form.coverImage = ''">
-                <el-icon><Close /></el-icon>
-              </el-button>
+            <!-- 已上传图片缩略图列表 -->
+            <div v-if="form.images.length > 0" class="image-thumbnail-list">
+              <div v-for="(img, idx) in form.images" :key="idx" class="image-thumbnail-item">
+                <el-image
+                  :src="img"
+                  style="width: 90px; height: 90px; border-radius: 4px; border: 1px solid #dcdfe6;"
+                  fit="cover"
+                  :preview-src-list="form.images"
+                  preview-teleported
+                >
+                  <template #error>
+                    <div class="image-slot">
+                      <el-icon><PictureFilled /></el-icon>
+                    </div>
+                  </template>
+                </el-image>
+                <el-button class="remove-image-btn" size="small" type="danger" circle @click="removeImage(idx)">
+                  <el-icon><Close /></el-icon>
+                </el-button>
+              </div>
             </div>
-            <el-input v-model="form.coverImage" placeholder="或手动输入图片URL" style="margin-top: 8px;" />
+            <el-input v-model="form.coverImage" placeholder="或手动输入封面图URL（可选）" style="margin-top: 8px;" />
           </div>
         </el-form-item>
         <el-form-item label="所需积分" prop="pointsRequired">
@@ -185,15 +189,22 @@ const beforeUpload = (file: File) => {
 
 const onUploadSuccess = (response: any, file: File, fileList: any) => {
   uploading.value = false
+  let url = ''
   if (response && response.code === 200 && response.data) {
-    form.coverImage = response.data
-    ElMessage.success('图片上传成功')
+    url = response.data
   } else if (response && response.url) {
-    form.coverImage = response.url
-    ElMessage.success('图片上传成功')
+    url = response.url
   } else {
     ElMessage.error('上传响应格式异常')
+    return
   }
+  // 添加到图片列表
+  form.images.push(url)
+  // 第一张图作为封面图
+  if (form.images.length === 1) {
+    form.coverImage = url
+  }
+  ElMessage.success('图片上传成功')
 }
 
 const onUploadError = (err: any, file: File, fileList: any) => {
@@ -207,7 +218,8 @@ const form = reactive({
   coverImage: '',
   pointsRequired: 0,
   stock: 0,
-  sortOrder: 0
+  sortOrder: 0,
+  images: [] as string[]
 })
 
 const rules: FormRules = {
@@ -260,6 +272,7 @@ function resetForm() {
   form.pointsRequired = 0
   form.stock = 0
   form.sortOrder = 0
+  form.images = []
 }
 
 function openCreateDialog() {
@@ -278,7 +291,18 @@ function openEditDialog(row: ProductItem) {
   form.pointsRequired = row.pointsRequired
   form.stock = row.stock
   form.sortOrder = row.sortOrder
+  form.images = row.images ? [...row.images] : []
   dialogVisible.value = true
+}
+
+function removeImage(idx: number) {
+  form.images.splice(idx, 1)
+  // 如果删除了封面图，更新封面图为第一张或清空
+  if (form.images.length > 0) {
+    form.coverImage = form.images[0]
+  } else {
+    form.coverImage = ''
+  }
 }
 
 async function saveProduct() {
@@ -367,5 +391,7 @@ async function handleDelete(row: ProductItem) {
 .upload-wrapper { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
 .upload-preview { position: relative; display: inline-block; }
 .remove-image-btn { position: absolute; top: -8px; right: -8px; }
-.image-slot { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 120px; height: 120px; background: #f5f7fa; border-radius: 4px; }
+.image-slot { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 90px; height: 90px; background: #f5f7fa; border-radius: 4px; }
+.image-thumbnail-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.image-thumbnail-item { position: relative; display: inline-block; }
 </style>
