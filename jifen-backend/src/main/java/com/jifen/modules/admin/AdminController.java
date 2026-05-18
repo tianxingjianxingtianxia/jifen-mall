@@ -153,6 +153,16 @@ public class AdminController {
         return Result.success();
     }
 
+    @GetMapping("/users/export")
+    public void exportUsers(HttpServletResponse response) {
+        checkAdmin();
+        List<?> list = adminService.exportUsers();
+        writeCsvResponse(response, list,
+                "ID,用户名,昵称,手机号,积分,注册时间",
+                new String[]{"id", "username", "nickname", "phone", "points", "createTime"},
+                "用户导出.csv");
+    }
+
     // ===== 积分有效期 =====
 
     @GetMapping("/expired-points")

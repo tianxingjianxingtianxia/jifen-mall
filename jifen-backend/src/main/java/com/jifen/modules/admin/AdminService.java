@@ -29,6 +29,7 @@ public interface AdminService {
     // === 导出 ===
     List<?> exportOrders(OrderPageRequest request);
     List<?> exportProducts(ProductPageRequest request);
+    List<?> exportUsers();
 
     // === 客户积分管理 ===
     void adjustUserPoints(Long userId, int points, String source, String remark);

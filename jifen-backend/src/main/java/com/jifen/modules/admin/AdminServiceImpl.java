@@ -311,6 +311,21 @@ public class AdminServiceImpl implements AdminService {
         }).collect(Collectors.toList());
     }
 
+    @Override
+    public List<?> exportUsers() {
+        List<User> users = userMapper.selectList(Wrappers.lambdaQuery(User.class).orderByDesc(User::getId));
+        return users.stream().map(u -> {
+            Map<String, Object> m = new LinkedHashMap<>();
+            m.put("id", u.getId());
+            m.put("username", u.getUsername());
+            m.put("nickname", u.getNickname() != null ? u.getNickname() : "");
+            m.put("phone", u.getPhone() != null ? u.getPhone() : "");
+            m.put("points", u.getPoints() != null ? u.getPoints() : 0);
+            m.put("createTime", u.getCreateTime() != null ? u.getCreateTime().toString() : "");
+            return m;
+        }).collect(Collectors.toList());
+    }
+
     // ===== 客户积分管理 =====
 
     @Override
