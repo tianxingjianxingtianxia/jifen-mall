@@ -1,0 +1,33 @@
+<!-- pages/address-edit/address-edit.wxml -->
+<view class="page-container">
+  <view class="card">
+    <view class="form-item">
+      <text class="form-label">收货人</text>
+      <input class="form-input" placeholder="请输入收货人姓名" value="{{form.receiverName}}" bindinput="onFieldChange" data-field="receiverName"/>
+    </view>
+    <view class="form-item">
+      <text class="form-label">手机号</text>
+      <input class="form-input" type="number" placeholder="请输入手机号" value="{{form.receiverPhone}}" bindinput="onFieldChange" data-field="receiverPhone"/>
+    </view>
+    <view class="form-item">
+      <text class="form-label">省市区</text>
+      <input class="form-input" placeholder="省份" value="{{form.province}}" bindinput="onFieldChange" data-field="province" style="margin-bottom:12rpx;"/>
+      <input class="form-input" placeholder="城市" value="{{form.city}}" bindinput="onFieldChange" data-field="city" style="margin-bottom:12rpx;"/>
+      <input class="form-input" placeholder="区/县" value="{{form.district}}" bindinput="onFieldChange" data-field="district"/>
+    </view>
+    <view class="form-item">
+      <text class="form-label">详细地址</text>
+      <input class="form-input" placeholder="街道/楼栋/门牌号" value="{{form.detailAddress}}" bindinput="onFieldChange" data-field="detailAddress"/>
+    </view>
+    <view class="form-item flex-between">
+      <text class="form-label">设为默认地址</text>
+      <switch checked="{{form.isDefault === 1}}" bindchange="toggleDefault" color="#e4393c"/>
+    </view>
+  </view>
+
+  <view class="p-24">
+    <button class="btn-primary" style="width:100%;height:80rpx;line-height:80rpx;border-radius:40rpx;" bindtap="submit">
+      {{isEdit ? '保存修改' : '新增地址'}}
+    </button>
+  </view>
+</view>

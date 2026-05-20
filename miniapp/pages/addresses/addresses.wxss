@@ -1,0 +1,10 @@
+/* addresses */
+.address-card { margin-top:0; }
+.default-tag {
+  background: var(--primary); color: var(--white); font-size: 20rpx;
+  padding: 4rpx 12rpx; border-radius: 4rpx;
+}
+.set-default-btn { color: var(--primary); font-size: 24rpx; }
+.action-link { font-size: 26rpx; color: #409eff; }
+.bottom-bar { position:fixed; bottom:0; left:0; right:0; padding:16rpx 24rpx; background:var(--white); padding-bottom:calc(16rpx + env(safe-area-inset-bottom)); }
+.bottom-bar .btn-primary { width:100%; height:80rpx; line-height:80rpx; border-radius:40rpx; font-size:32rpx; }

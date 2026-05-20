@@ -1,0 +1,35 @@
+<!-- pages/orders/orders.wxml -->
+<view>
+  <scroll-view class="tab-bar" scroll-x enable-flex>
+    <view class="tab-item {{activeTab === item.value ? 'active' : ''}}"
+          wx:for="{{tabs}}" wx:key="value"
+          style="display:inline-block;padding:14rpx 30rpx;font-size:26rpx;border-radius:32rpx;margin-right:16rpx;{{activeTab === item.value ? 'background:#e4393c;color:#fff;' : 'background:#f5f5f5;color:#666;'}}"
+          bindtap="onTabChange" data-value="{{item.value}}">{{item.label}}</view>
+  </scroll-view>
+
+  <view wx:if="{{orders.length > 0}}">
+    <view class="jd-order-card" wx:for="{{orders}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}">
+      <view class="jd-order-header">
+        <text class="jd-order-shop">订单号：{{item.orderNo}}</text>
+        <text style="font-size:24rpx;font-weight:600;color:{{item.status === 0 ? '#f3a939' : item.status === 1 ? '#409eff' : item.status === 2 ? '#67c23a' : '#999'}};">{{item.statusText}}</text>
+      </view>
+      <view class="jd-order-body">
+        <image class="jd-order-img" src="{{item.productImage}}" mode="aspectFill" lazy-load/>
+        <view class="jd-order-info">
+          <view class="jd-order-name">{{item.productName}}</view>
+          <view style="display:flex;align-items:center;justify-content:space-between;">
+            <text style="font-size:32rpx;color:#e4393c;font-weight:700;">{{item.pointsSpent}}积分</text>
+          </view>
+        </view>
+      </view>
+      <view class="jd-order-footer" wx:if="{{item.status === 0 || item.status === 1}}">
+        <button class="jd-btn" wx:if="{{item.status === 0}}" catchtap="cancelOrder" data-id="{{item.id}}">取消</button>
+        <button class="jd-btn jd-btn-primary" wx:if="{{item.status === 1}}" catchtap="confirmOrder" data-id="{{item.id}}">确认收货</button>
+      </view>
+    </view>
+  </view>
+  <view class="jd-empty" wx:if="{{!loading && orders.length === 0}}">
+    <view class="jd-empty-icon">📦</view><view>暂无订单</view>
+  </view>
+  <view class="jd-loading" wx:if="{{loading}}">加载中...</view>
+</view>

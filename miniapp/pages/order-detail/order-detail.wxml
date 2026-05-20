@@ -1,0 +1,40 @@
+<!-- pages/order-detail/order-detail.wxml -->
+<view wx:if="{{order}}">
+  <view class="jd-info-block" style="text-align:center;">
+    <view style="font-size:36rpx;font-weight:700;color:{{order.status === 0 ? '#f3a939' : order.status === 1 ? '#409eff' : order.status === 2 ? '#67c23a' : '#999'}};">{{order.statusText}}</view>
+  </view>
+
+  <view class="jd-info-block">
+    <view style="font-size:30rpx;font-weight:600;margin-bottom:16rpx;">商品信息</view>
+    <view style="display:flex;">
+      <image style="width:160rpx;height:160rpx;border-radius:12rpx;background:#f8f8f8;" src="{{order.productImage}}" mode="aspectFill"/>
+      <view style="margin-left:20rpx;flex:1;">
+        <view style="font-size:28rpx;font-weight:500;">{{order.productName}}</view>
+        <view style="font-size:36rpx;color:#e4393c;font-weight:700;margin-top:20rpx;">{{order.pointsSpent}}积分</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="jd-info-block">
+    <view style="font-size:30rpx;font-weight:600;margin-bottom:16rpx;">收货信息</view>
+    <view style="padding:12rpx 0;border-bottom:1rpx solid #f5f5f5;font-size:28rpx;">{{order.receiverName}} {{order.receiverPhone}}</view>
+    <view style="padding:12rpx 0;font-size:28rpx;color:#666;">{{order.receiverAddress}}</view>
+  </view>
+
+  <view class="jd-info-block" wx:if="{{order.trackingNo}}">
+    <view style="font-size:30rpx;font-weight:600;margin-bottom:16rpx;">物流信息</view>
+    <view style="font-size:28rpx;">{{order.trackingNo}}</view>
+  </view>
+
+  <view class="jd-info-block">
+    <view style="font-size:30rpx;font-weight:600;margin-bottom:16rpx;">订单信息</view>
+    <view style="display:flex;justify-content:space-between;padding:12rpx 0;font-size:26rpx;color:#999;">订单号：{{order.orderNo}}</view>
+    <view style="display:flex;justify-content:space-between;padding:12rpx 0;font-size:26rpx;color:#999;">创建时间：{{order.createTime}}</view>
+  </view>
+
+  <view style="height:140rpx;"></view>
+  <view class="jd-bottom-btn" wx:if="{{order.status === 0 || order.status === 1}}">
+    <button wx:if="{{order.status === 0}}" style="flex:1;height:80rpx;line-height:80rpx;border-radius:40rpx;font-size:30rpx;font-weight:600;border:2rpx solid #999;color:#666;background:#fff;" bindtap="cancelOrder">取消订单</button>
+    <button wx:if="{{order.status === 1}}" style="flex:1;height:80rpx;line-height:80rpx;border-radius:40rpx;font-size:30rpx;font-weight:600;background:linear-gradient(135deg,#e4393c,#f55555);color:#fff;border:none;" bindtap="confirmOrder">确认收货</button>
+  </view>
+</view>

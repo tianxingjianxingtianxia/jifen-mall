@@ -1,0 +1,55 @@
+<!-- pages/product-detail/product-detail.wxml -->
+<view wx:if="{{product}}">
+  <swiper class="jd-swiper" indicator-dots autoplay circular indicator-color="rgba(255,255,255,0.5)" indicator-active-color="#e4393c">
+    <swiper-item wx:for="{{images}}" wx:key="*this">
+      <image class="jd-swiper-img" src="{{item}}" mode="aspectFill"/>
+    </swiper-item>
+  </swiper>
+
+  <view class="jd-info-block">
+    <view class="jd-product-name" style="height:auto;font-size:32rpx;font-weight:600;">{{product.name}}</view>
+    <view class="jd-price-row">
+      <text class="jd-price-unit">¥</text>
+      <text class="jd-price-big">{{product.pointsRequired}}</text>
+      <text style="font-size:26rpx;color:#999;margin-left:16rpx;">积分</text>
+      <text style="margin-left:auto;font-size:24rpx;color:#999;">{{product.stockStatus}} | 已兑{{product.saleCount}}次</text>
+    </view>
+  </view>
+
+  <view class="jd-info-block" wx:if="{{product.description}}">
+    <view style="font-size:30rpx;font-weight:600;margin-bottom:16rpx;">商品描述</view>
+    <view style="font-size:28rpx;line-height:1.8;color:#666;">{{product.description}}</view>
+  </view>
+
+  <view style="height:140rpx;"></view>
+
+  <view class="jd-bottom-btn">
+    <button bindtap="openExchange" disabled="{{product.status !== 1 || product.stock <= 0}}">
+      {{product.status !== 1 ? '已下架' : product.stock <= 0 ? '库存不足' : '立即兑换'}}
+    </button>
+  </view>
+
+  <!-- 兑换弹窗 -->
+  <view class="jd-mask" wx:if="{{showExchange}}" bindtap="closeExchange"></view>
+  <view class="jd-popup" wx:if="{{showExchange}}">
+    <view style="padding:32rpx 24rpx 16rpx;font-size:32rpx;font-weight:600;display:flex;justify-content:space-between;">
+      <text>选择收货地址</text>
+      <text bindtap="closeExchange" style="color:#999;font-size:40rpx;">✕</text>
+    </view>
+    <scroll-view scroll-y style="max-height:400rpx;padding:0 24rpx;">
+      <view wx:for="{{addresses}}" wx:key="id" bindtap="selectAddress" data-index="{{index}}"
+            style="padding:24rpx;border:2rpx solid {{selectedAddress && selectedAddress.id === item.id ? '#e4393c' : '#f0f0f0'}};border-radius:12rpx;margin-bottom:16rpx;position:relative;{{selectedAddress && selectedAddress.id === item.id ? 'background:rgba(228,57,60,0.03);' : ''}}">
+        <view style="display:flex;justify-content:space-between;">
+          <text style="font-weight:600;">{{item.receiverName}}</text>
+          <text>{{item.receiverPhone}}</text>
+        </view>
+        <view style="font-size:24rpx;color:#999;margin-top:12rpx;">{{item.province}}{{item.city}}{{item.district}} {{item.detailAddress}}</view>
+        <view wx:if="{{item.isDefault === 1}}" style="position:absolute;top:12rpx;right:12rpx;background:#e4393c;color:#fff;font-size:20rpx;padding:4rpx 12rpx;border-radius:4rpx;">默认</view>
+      </view>
+    </scroll-view>
+    <view style="display:flex;gap:24rpx;padding:24rpx;border-top:1rpx solid #f0f0f0;">
+      <button style="flex:1;height:72rpx;line-height:72rpx;border-radius:36rpx;font-size:28rpx;border:2rpx solid #999;color:#666;background:#fff;" bindtap="goAddAddress">新增地址</button>
+      <button style="flex:2;height:72rpx;line-height:72rpx;border-radius:36rpx;font-size:28rpx;background:linear-gradient(135deg,#e4393c,#f55555);color:#fff;border:none;" bindtap="confirmExchange" loading="{{exchanging}}">确认兑换</button>
+    </view>
+  </view>
+</view>

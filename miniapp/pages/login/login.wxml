@@ -1,0 +1,31 @@
+<!-- pages/login/login.wxml -->
+<view class="jd-login-page">
+  <view class="jd-login-top">
+    <view class="jd-login-logo">🎁</view>
+    <view class="jd-login-title">积分商城</view>
+    <view style="color:#999;font-size:26rpx;margin-top:12rpx;">好物兑换，积分不浪费</view>
+  </view>
+
+  <button class="jd-login-btn" bindtap="handleLogin" loading="{{loading}}" disabled="{{loading}}">
+    {{loading ? '登录中...' : '微信一键登录'}}
+  </button>
+
+  <view class="jd-dev-section" wx:if="{{showDev}}">
+    <view class="jd-dev-tabs">
+      <view class="jd-dev-tab {{devMode === 'login' ? 'active' : ''}}" bindtap="switchDevMode" data-mode="login">账号登录</view>
+      <view class="jd-dev-tab {{devMode === 'register' ? 'active' : ''}}" bindtap="switchDevMode" data-mode="register">注册账号</view>
+    </view>
+
+    <view wx:if="{{devMode === 'login'}}">
+      <input class="jd-dev-input" placeholder="用户名" value="{{username}}" bindinput="onFieldChange" data-field="username"/>
+      <input class="jd-dev-input" type="password" placeholder="密码" value="{{password}}" bindinput="onFieldChange" data-field="password"/>
+      <button class="jd-dev-btn" bindtap="devLogin" loading="{{loading}}">登录</button>
+    </view>
+    <view wx:else>
+      <input class="jd-dev-input" placeholder="用户名" value="{{username}}" bindinput="onFieldChange" data-field="username"/>
+      <input class="jd-dev-input" type="password" placeholder="密码" value="{{password}}" bindinput="onFieldChange" data-field="password"/>
+      <input class="jd-dev-input" placeholder="昵称(选填)" value="{{nickname}}" bindinput="onFieldChange" data-field="nickname"/>
+      <button class="jd-dev-btn" bindtap="devRegister" loading="{{loading}}">注册</button>
+    </view>
+  </view>
+</view>

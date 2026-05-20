@@ -1,0 +1,4 @@
+/* address-edit */
+.form-item { padding: 24rpx 0; border-bottom: 1rpx solid var(--border); }
+.form-label { font-size: 28rpx; color: var(--text-light); display: block; margin-bottom: 12rpx; }
+.form-input { width: 100%; height: 72rpx; background: var(--bg); border-radius: 8rpx; padding: 0 16rpx; font-size: 28rpx; }

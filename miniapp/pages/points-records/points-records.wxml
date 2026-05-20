@@ -1,0 +1,20 @@
+<!-- pages/points-records/points-records.wxml -->
+<view>
+  <view wx:if="{{records.length > 0}}">
+    <view class="jd-record-item" wx:for="{{records}}" wx:key="id">
+      <view>
+        <view style="font-size:28rpx;font-weight:500;">
+          {{item.source === 'SIGN_IN' ? '每日签到' : item.source === 'EXCHANGE' ? '积分兑换' : item.source === 'CANCEL' ? '订单取消退回' : item.remark || '积分变动'}}
+        </view>
+        <view style="font-size:22rpx;color:#ccc;margin-top:8rpx;">{{item.createTime}}</view>
+      </view>
+      <view style="font-size:36rpx;font-weight:700;{{item.type === 1 ? 'color:#e4393c;' : 'color:#333;'}}">
+        {{item.type === 1 ? '+' : ''}}{{item.points}}
+      </view>
+    </view>
+  </view>
+  <view class="jd-empty" wx:if="{{!loading && records.length === 0}}">
+    <view class="jd-empty-icon">📋</view><view>暂无积分记录</view>
+  </view>
+  <view class="jd-loading" wx:if="{{loading}}">加载中...</view>
+</view>

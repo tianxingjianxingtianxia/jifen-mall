@@ -1,0 +1,74 @@
+<!-- pages/index/index.wxml -->
+<view>
+  <!-- 头部 -->
+  <view class="jd-header">
+    <view class="jd-search-box">
+      <input class="flex-1" style="height:100%;font-size:26rpx;" placeholder="搜索商品" value="{{searchValue}}" bindinput="onSearchInput" bindconfirm="onSearchConfirm" confirm-type="search"/>
+      <text style="font-size:28rpx;padding:8rpx 12rpx;" bindtap="onSearchConfirm">搜索</text>
+    </view>
+    <view class="jd-points-bar">
+      <view>
+        <view class="jd-points-value">{{points}}</view>
+        <view class="jd-points-label">可用积分</view>
+      </view>
+      <button class="jd-signin" bindtap="handleSignIn" disabled="{{todaySigned}}">
+        {{todaySigned ? '已签到' : '签到'}}
+      </button>
+    </view>
+    <view class="jd-points-sub">
+      <text>累计获得 {{totalEarned}}</text>
+      <text>累计兑换 {{totalSpent}}</text>
+    </view>
+  </view>
+
+  <!-- 排序栏 -->
+  <view style="padding:16rpx 24rpx;display:flex;gap:32rpx;background:#fff;">
+    <text class="{{sortBy === '' ? 'active' : ''}}" style="font-size:26rpx;color:{{sortBy === '' ? '#e4393c' : '#999'}};font-weight:{{sortBy === '' ? '600' : '400'}};" bindtap="onSortChange" data-sort="">综合</text>
+    <text class="{{sortBy === 'points_asc' ? 'active' : ''}}" style="font-size:26rpx;color:{{sortBy === 'points_asc' ? '#e4393c' : '#999'}};font-weight:{{sortBy === 'points_asc' ? '600' : '400'}};" bindtap="onSortChange" data-sort="points_asc">积分↑</text>
+    <text class="{{sortBy === 'points_desc' ? 'active' : ''}}" style="font-size:26rpx;color:{{sortBy === 'points_desc' ? '#e4393c' : '#999'}};font-weight:{{sortBy === 'points_desc' ? '600' : '400'}};" bindtap="onSortChange" data-sort="points_desc">积分↓</text>
+  </view>
+
+  <!-- 商品列表 -->
+  <view class="jd-products" wx:if="{{products.length > 0}}">
+    <block wx:for="{{products}}" wx:key="id">
+      <view wx:if="{{index % 2 === 0}}" class="jd-product-row">
+        <view class="jd-product-card" bindtap="goDetail" data-id="{{products[index].id}}">
+          <view class="jd-product-img-wrap">
+            <image class="jd-product-img" src="{{products[index].coverImage}}" mode="aspectFill" lazy-load/>
+            <view class="jd-product-tag {{products[index].stock <= 0 ? 'soldout' : ''}}" wx:if="{{products[index].stock <= 0}}">售罄</view>
+          </view>
+          <view class="jd-product-info">
+            <view class="jd-product-name">{{products[index].name}}</view>
+            <view class="jd-product-price">
+              <text>¥</text>
+              <text class="jd-product-points">{{products[index].pointsRequired}}</text>
+              <text class="jd-product-sold">已兑{{products[index].saleCount}}次</text>
+            </view>
+          </view>
+        </view>
+        <view class="jd-product-card" wx:if="{{products[index+1]}}" bindtap="goDetail" data-id="{{products[index+1].id}}">
+          <view class="jd-product-img-wrap">
+            <image class="jd-product-img" src="{{products[index+1].coverImage}}" mode="aspectFill" lazy-load/>
+            <view class="jd-product-tag {{products[index+1].stock <= 0 ? 'soldout' : ''}}" wx:if="{{products[index+1].stock <= 0}}">售罄</view>
+          </view>
+          <view class="jd-product-info">
+            <view class="jd-product-name">{{products[index+1].name}}</view>
+            <view class="jd-product-price">
+              <text>¥</text>
+              <text class="jd-product-points">{{products[index+1].pointsRequired}}</text>
+              <text class="jd-product-sold">已兑{{products[index+1].saleCount}}次</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 加载/空 -->
+  <view class="jd-loading" wx:if="{{loading}}">正在加载...</view>
+  <view class="jd-loading" wx:elif="{{!hasMore && products.length > 0}}">— 已经到底了 —</view>
+  <view class="jd-empty" wx:if="{{!loading && products.length === 0}}">
+    <view class="jd-empty-icon">📦</view>
+    <view>暂无商品</view>
+  </view>
+</view>

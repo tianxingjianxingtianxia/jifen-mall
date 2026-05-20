@@ -1,0 +1,496 @@
+/* 京东风格全局变量 */
+page {
+  --jd-primary: #e4393c;
+  --jd-primary-dark: #c1272d;
+  --jd-gold: #f3a939;
+  --jd-bg: #f5f5f5;
+  --jd-white: #ffffff;
+  --jd-text: #333333;
+  --jd-text-gray: #999999;
+  --jd-text-light: #cccccc;
+  --jd-border: #f0f0f0;
+  --jd-shadow: 0 2rpx 20rpx rgba(0,0,0,0.06);
+  --jd-radius: 16rpx;
+  
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+  font-size: 28rpx;
+  color: var(--jd-text);
+  background: var(--jd-bg);
+}
+
+/* ====== 首页 ====== */
+.jd-header {
+  background: linear-gradient(135deg, var(--jd-primary) 0%, #f55555 100%);
+  padding: 20rpx 24rpx 32rpx;
+}
+
+.jd-search-box {
+  background: rgba(255,255,255,0.95);
+  border-radius: 40rpx;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  padding: 0 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.08);
+}
+.jd-search-box input {
+  flex: 1;
+  height: 100%;
+  font-size: 26rpx;
+}
+
+.jd-points-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 28rpx;
+}
+.jd-points-value {
+  font-size: 72rpx;
+  font-weight: 800;
+  color: #fff;
+}
+.jd-points-label {
+  font-size: 24rpx;
+  color: rgba(255,255,255,0.8);
+}
+.jd-signin {
+  background: linear-gradient(135deg, var(--jd-gold), #f7b84e);
+  color: #fff;
+  border-radius: 40rpx;
+  padding: 16rpx 36rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 4rpx 12rpx rgba(243,169,57,0.4);
+}
+.jd-signin[disabled] {
+  background: rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.5);
+  box-shadow: none;
+}
+
+.jd-points-sub {
+  display: flex;
+  margin-top: 20rpx;
+  gap: 40rpx;
+}
+.jd-points-sub text {
+  font-size: 22rpx;
+  color: rgba(255,255,255,0.7);
+}
+
+/* ====== 商品卡片 ====== */
+.jd-products {
+  padding: 16rpx 16rpx 0;
+  margin-top: -8rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.jd-product-row {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 16rpx;
+}
+.jd-product-card {
+  flex: 1;
+  background: var(--jd-white);
+  border-radius: var(--jd-radius);
+  overflow: hidden;
+  box-shadow: var(--jd-shadow);
+  transition: transform 0.2s;
+}
+.jd-product-card:active {
+  transform: scale(0.97);
+}
+
+.jd-product-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 340rpx;
+  overflow: hidden;
+}
+.jd-product-img {
+  width: 100%;
+  height: 100%;
+  background: #f8f8f8;
+}
+.jd-product-tag {
+  position: absolute;
+  top: 12rpx;
+  left: 12rpx;
+  background: var(--jd-primary);
+  color: #fff;
+  font-size: 20rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+}
+.jd-product-tag.soldout {
+  background: #999;
+}
+
+.jd-product-info {
+  padding: 20rpx 16rpx 16rpx;
+}
+.jd-product-name {
+  font-size: 28rpx;
+  font-weight: 500;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  height: 78rpx;
+}
+.jd-product-price {
+  display: flex;
+  align-items: baseline;
+  margin-top: 16rpx;
+}
+.jd-product-price text:first-child {
+  font-size: 22rpx;
+  color: var(--jd-primary);
+  font-weight: 600;
+}
+.jd-product-points {
+  font-size: 36rpx;
+  color: var(--jd-primary);
+  font-weight: 800;
+}
+.jd-product-sold {
+  margin-left: auto;
+  font-size: 22rpx;
+  color: var(--jd-text-gray);
+}
+
+/* ====== 空/加载 ====== */
+.jd-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 120rpx 0;
+  color: var(--jd-text-light);
+}
+.jd-empty-icon { font-size: 100rpx; margin-bottom: 24rpx; }
+
+.jd-loading {
+  display: flex;
+  justify-content: center;
+  padding: 30rpx 0;
+  color: var(--jd-text-gray);
+  font-size: 24rpx;
+}
+
+/* ====== 订单 ====== */
+.jd-order-card {
+  background: var(--jd-white);
+  margin: 16rpx 24rpx;
+  border-radius: var(--jd-radius);
+  overflow: hidden;
+  box-shadow: var(--jd-shadow);
+}
+.jd-order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 24rpx;
+  border-bottom: 1rpx solid var(--jd-border);
+}
+.jd-order-shop { font-size: 24rpx; color: var(--jd-text-gray); }
+.jd-order-status { font-size: 24rpx; font-weight: 600; }
+
+.jd-order-body {
+  display: flex;
+  padding: 24rpx;
+}
+.jd-order-img {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 12rpx;
+  background: #f8f8f8;
+}
+.jd-order-info {
+  flex: 1;
+  margin-left: 20rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.jd-order-name {
+  font-size: 28rpx;
+  font-weight: 500;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.jd-order-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20rpx;
+  padding: 0 24rpx 20rpx;
+}
+.jd-btn {
+  padding: 12rpx 28rpx;
+  border-radius: 32rpx;
+  font-size: 24rpx;
+  font-weight: 500;
+  border: 2rpx solid var(--jd-text-gray);
+  background: var(--jd-white);
+  color: var(--jd-text);
+}
+.jd-btn-primary {
+  background: var(--jd-primary);
+  color: var(--jd-white);
+  border-color: var(--jd-primary);
+}
+
+/* ====== 详情页 ====== */
+.jd-swiper {
+  height: 700rpx;
+}
+.jd-swiper-img {
+  width: 100%;
+  height: 100%;
+}
+
+.jd-info-block {
+  background: var(--jd-white);
+  padding: 32rpx 24rpx;
+  margin-bottom: 20rpx;
+}
+.jd-price-row {
+  display: flex;
+  align-items: baseline;
+  margin-top: 16rpx;
+}
+.jd-price-big {
+  font-size: 56rpx;
+  font-weight: 800;
+  color: var(--jd-primary);
+}
+.jd-price-unit {
+  font-size: 26rpx;
+  color: var(--jd-primary);
+  font-weight: 600;
+}
+
+.jd-bottom-btn {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  gap: 24rpx;
+  padding: 16rpx 24rpx;
+  background: var(--jd-white);
+  box-shadow: 0 -2rpx 16rpx rgba(0,0,0,0.05);
+  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+}
+.jd-bottom-btn button {
+  flex: 1;
+  height: 80rpx;
+  line-height: 80rpx;
+  border-radius: 40rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  border: none;
+  background: linear-gradient(135deg, var(--jd-primary), #f55555);
+  color: #fff;
+}
+
+/* ====== 个人中心 ====== */
+.jd-profile-top {
+  background: linear-gradient(135deg, var(--jd-primary) 0%, #f55555 100%);
+  padding: 40rpx 32rpx 60rpx;
+}
+.jd-avatar-row {
+  display: flex;
+  align-items: center;
+}
+.jd-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 56rpx;
+  border: 3rpx solid rgba(255,255,255,0.4);
+}
+.jd-user-info {
+  margin-left: 24rpx;
+  color: #fff;
+}
+.jd-user-name {
+  font-size: 36rpx;
+  font-weight: 700;
+}
+.jd-user-points {
+  margin-top: 8rpx;
+  font-size: 26rpx;
+  opacity: 0.8;
+}
+.jd-menu-list {
+  background: var(--jd-white);
+  margin: -20rpx 24rpx 0;
+  border-radius: var(--jd-radius);
+  overflow: hidden;
+  box-shadow: var(--jd-shadow);
+  position: relative;
+  z-index: 1;
+}
+.jd-menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32rpx 24rpx;
+  border-bottom: 1rpx solid var(--jd-border);
+  font-size: 30rpx;
+}
+.jd-menu-item:last-child { border: none; }
+.jd-menu-arrow { color: var(--jd-text-light); font-size: 32rpx; }
+
+/* 弹窗 */
+.jd-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 200;
+  animation: fadeIn 0.25s;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.jd-popup {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--jd-white);
+  border-radius: 24rpx 24rpx 0 0;
+  z-index: 201;
+  max-height: 75vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease;
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+/* ====== 地址 ====== */
+.jd-addr-card {
+  background: var(--jd-white);
+  margin: 16rpx 24rpx;
+  border-radius: var(--jd-radius);
+  padding: 28rpx 24rpx;
+  box-shadow: var(--jd-shadow);
+  position: relative;
+}
+.jd-addr-tag {
+  position: absolute;
+  top: 16rpx;
+  right: 16rpx;
+  background: var(--jd-primary);
+  color: #fff;
+  font-size: 20rpx;
+  padding: 4rpx 14rpx;
+  border-radius: 4rpx;
+}
+
+/* ====== 登录页 ====== */
+.jd-login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background: #fff;
+}
+.jd-login-top {
+  margin-top: 160rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.jd-login-logo {
+  font-size: 100rpx;
+  margin-bottom: 24rpx;
+}
+.jd-login-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: var(--jd-text);
+}
+
+.jd-login-btn {
+  margin-top: 80rpx;
+  width: 550rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  background: linear-gradient(135deg, #07c160, #06ad56);
+  color: #fff;
+  border-radius: 44rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 8rpx 24rpx rgba(7,193,96,0.3);
+}
+
+/* ====== 开发登录 ====== */
+.jd-dev-section {
+  margin-top: 40rpx;
+  padding: 24rpx 32rpx;
+  background: var(--jd-bg);
+  border-radius: var(--jd-radius);
+  width: 550rpx;
+}
+.jd-dev-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 40rpx;
+  margin-bottom: 24rpx;
+}
+.jd-dev-tab {
+  font-size: 28rpx;
+  color: var(--jd-text-gray);
+  padding-bottom: 8rpx;
+}
+.jd-dev-tab.active {
+  color: var(--jd-primary);
+  font-weight: 600;
+  border-bottom: 4rpx solid var(--jd-primary);
+}
+.jd-dev-input {
+  width: 100%;
+  height: 76rpx;
+  background: var(--jd-white);
+  border-radius: 8rpx;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+  margin-bottom: 16rpx;
+}
+.jd-dev-btn {
+  width: 100%;
+  height: 76rpx;
+  line-height: 76rpx;
+  background: linear-gradient(135deg, #409eff, #66b1ff);
+  color: #fff;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  border: none;
+  font-weight: 500;
+}
+
+/* ====== 积分记录 ====== */
+.jd-record-item {
+  background: var(--jd-white);
+  margin: 12rpx 24rpx;
+  padding: 28rpx 24rpx;
+  border-radius: var(--jd-radius);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--jd-shadow);
+}

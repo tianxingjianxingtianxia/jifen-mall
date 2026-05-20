@@ -1,0 +1,104 @@
+/* pages/product-detail/product-detail.wxss */
+.swiper { height: 600rpx; }
+.swiper-img { width: 100%; height: 100%; }
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 16rpx;
+}
+.desc-text {
+  font-size: 28rpx;
+  line-height: 1.8;
+  color: #666;
+}
+
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16rpx 24rpx;
+  background: var(--white);
+  box-shadow: 0 -2rpx 12rpx rgba(0,0,0,0.05);
+  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+}
+.exchange-btn {
+  width: 100%;
+  height: 80rpx;
+  line-height: 80rpx;
+  border-radius: 40rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+}
+
+/* 弹窗 */
+.mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 100;
+}
+.exchange-popup {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--white);
+  border-radius: 24rpx 24rpx 0 0;
+  z-index: 101;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32rpx 24rpx 16rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+}
+.close-btn { font-size: 40rpx; color: var(--text-light); }
+.address-list {
+  flex: 1;
+  max-height: 400rpx;
+  padding: 0 24rpx;
+}
+.address-item {
+  padding: 24rpx;
+  border: 2rpx solid var(--border);
+  border-radius: 12rpx;
+  margin-bottom: 16rpx;
+  position: relative;
+}
+.address-item.selected {
+  border-color: var(--primary);
+  background: rgba(227,57,60,0.05);
+}
+.default-tag {
+  position: absolute;
+  top: 12rpx;
+  right: 12rpx;
+  background: var(--primary);
+  color: var(--white);
+  font-size: 20rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 4rpx;
+}
+.popup-footer {
+  display: flex;
+  gap: 24rpx;
+  padding: 24rpx;
+  border-top: 1rpx solid var(--border);
+}
+.popup-footer .btn-outline {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx 0;
+}
+.popup-footer .btn-primary {
+  flex: 2;
+  height: 72rpx;
+  line-height: 72rpx;
+  font-size: 28rpx;
+}
