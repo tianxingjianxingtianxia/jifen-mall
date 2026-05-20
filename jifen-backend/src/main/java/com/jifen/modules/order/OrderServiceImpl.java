@@ -259,12 +259,12 @@ public class OrderServiceImpl implements OrderService {
 
     private String getStatusText(Integer status) {
         if (status == null) return "未知";
-        return switch (status) {
-            case 0 -> "待发货";
-            case 1 -> "已发货";
-            case 2 -> "已完成";
-            case 3 -> "已取消";
-            default -> "未知";
-        };
+        switch (status) {
+            case 0: return "待发货";
+            case 1: return "已发货";
+            case 2: return "已完成";
+            case 3: return "已取消";
+            default: return "未知";
+        }
     }
 }

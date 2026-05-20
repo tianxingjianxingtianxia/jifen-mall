@@ -1,1 +1,0 @@
-hermes exec "按 PRD 执行积分商城项目，使用标准项目管理流程：3 个 Sprint、TDD、每个功能提 PR、每日进度同步、Sprint 结束后输出报告。技术栈 Spring Boot + Vue3。开始。"

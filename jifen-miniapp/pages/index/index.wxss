@@ -1,2 +1,0 @@
-/* 首页样式 - 全内联 */
-.page { min-height: 100vh; background: #f5f7fa; }

@@ -6,7 +6,7 @@ import com.jifen.common.Result;
 import com.jifen.common.exception.BusinessException;
 import com.jifen.modules.admin.dto.*;
 import com.jifen.modules.order.dto.OrderVO;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

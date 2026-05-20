@@ -5,7 +5,7 @@ import com.jifen.common.PageResult;
 import com.jifen.common.Result;
 import com.jifen.modules.order.dto.CreateOrderRequest;
 import com.jifen.modules.order.dto.OrderVO;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

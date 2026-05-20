@@ -4,7 +4,7 @@ import com.jifen.auth.UserContextUtil;
 import com.jifen.common.Result;
 import com.jifen.modules.address.dto.AddressRequest;
 import com.jifen.modules.address.dto.AddressVO;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
