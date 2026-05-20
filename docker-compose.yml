@@ -1,11 +1,11 @@
 version: '3.8'
 
 services:
-  jifen-backend:
+  backend:
     build:
-      context: ./jifen-backend
+      context: ./backend
       dockerfile: Dockerfile
-    container_name: jifen-backend
+    container_name: backend
     ports:
       - "8080:8080"
     environment:
@@ -20,11 +20,11 @@ services:
 
   nginx:
     image: nginx:alpine
-    container_name: jifen-frontend
+    container_name: frontend
     ports:
       - "80:80"
     volumes:
-      - ./jifen-frontend/dist:/usr/share/nginx/html:ro
+      - ./frontend/dist:/usr/share/nginx/html:ro
     depends_on:
-      - jifen-backend
+      - backend
     restart: unless-stopped
