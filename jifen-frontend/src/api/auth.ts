@@ -22,7 +22,7 @@ export interface UserInfo {
 }
 
 /** 用户注册 */
-export function register(data: { username: string; password: string; nickname: string }) {
+export function register(data: { username: string; password: string; nickname: string; phone: string }) {
   return request.post<AuthResult>('/auth/register', data) as Promise<AuthResult>
 }
 

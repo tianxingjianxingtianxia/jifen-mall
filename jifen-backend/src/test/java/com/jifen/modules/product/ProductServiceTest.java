@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS, statements = {
+@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, statements = {
     "CREATE TABLE IF NOT EXISTS wj_product (" +
     "  id BIGINT AUTO_INCREMENT PRIMARY KEY," +
     "  name VARCHAR(100) NOT NULL," +

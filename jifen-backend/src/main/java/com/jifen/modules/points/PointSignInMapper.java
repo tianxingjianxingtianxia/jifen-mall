@@ -13,4 +13,7 @@ public interface PointSignInMapper extends BaseMapper<PointSignIn> {
 
     @Select("SELECT COUNT(*) FROM wj_sign_in WHERE user_id = #{userId} AND sign_date = #{signDate} AND is_deleted = 0")
     int countByUserIdAndDate(@Param("userId") Long userId, @Param("signDate") LocalDate signDate);
+
+    @Select("SELECT COUNT(*) FROM wj_sign_in WHERE sign_date = #{date} AND is_deleted = 0")
+    int countByDate(@Param("date") LocalDate date);
 }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,7 +60,7 @@ public class PointsServiceImpl implements PointsService {
         signIn.setPointsAwarded(signInPoints);
         pointSignInMapper.insert(signIn);
 
-        // Record point detail
+        // Record point detail - set expiry_date based on config
         PointRecord record = new PointRecord();
         record.setUserId(userId);
         record.setType(1); // 获得
@@ -69,10 +70,31 @@ public class PointsServiceImpl implements PointsService {
         record.setBalanceAfter(user.getPoints() + signInPoints);
         record.setRelatedId(signIn.getId());
         record.setRemark("每日签到");
+        // 设置积分过期时间
+        int validityDays = getPointsValidityDays();
+        if (validityDays > 0) {
+            record.setExpireTime(LocalDateTime.now().plusDays(validityDays));
+        }
         pointRecordMapper.insert(record);
 
         // Return response
         return new SignInResponse(true, signInPoints, user.getPoints() + signInPoints);
+    }
+
+    /**
+     * 从系统配置获取积分有效期天数，默认365
+     */
+    private int getPointsValidityDays() {
+        String value = sysConfigMapper.getValueByKey("points_validity_days");
+        if (value == null) {
+            return 365;
+        }
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            log.warn("points_validity_days 配置值无效: {}", value);
+            return 365;
+        }
     }
 
     @Override
@@ -120,6 +142,7 @@ public class PointsServiceImpl implements PointsService {
         vo.setSource(record.getSource());
         vo.setRemark(record.getRemark());
         vo.setCreateTime(record.getCreateTime());
+        vo.setExpireTime(record.getExpireTime());
         return vo;
     }
 
@@ -137,5 +160,16 @@ public class PointsServiceImpl implements PointsService {
             log.warn("sign_in_points 配置值无效: {}", value);
             return 10;
         }
+    }
+
+    @Override
+    @Transactional
+    public void topup(Long userId, int points) {
+        User user = userMapper.selectById(userId);
+        if (user == null) {
+            throw new BusinessException("用户不存在");
+        }
+        userMapper.addPointsAndEarned(userId, points);
+        log.info("[TEST] 用户{}充值{}积分", userId, points);
     }
 }

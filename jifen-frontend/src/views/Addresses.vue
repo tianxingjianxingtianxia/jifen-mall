@@ -1,15 +1,34 @@
 <template>
   <div class="addresses-page">
-    <!-- 顶部导航 -->
     <header class="header">
       <div class="header-inner">
-        <el-button text @click="goBack">
-          <el-icon><ArrowLeft /></el-icon> 返回
-        </el-button>
-        <h1 class="header-title">地址管理</h1>
-        <el-button type="primary" :icon="Plus" @click="openAddDialog">
-          新增地址
-        </el-button>
+        <h1 class="logo">积分商城</h1>
+        <div class="header-nav">
+          <router-link to="/home" class="nav-link">首页</router-link>
+          <router-link to="/orders" class="nav-link">我的订单</router-link>
+          <router-link to="/points-records" class="nav-link">积分明细</router-link>
+          <router-link to="/addresses" class="nav-link">地址管理</router-link>
+        </div>
+        <div class="header-right">
+          <el-dropdown trigger="click">
+            <span class="user-info">
+              <el-icon><User /></el-icon>
+              {{ userStore.nickname || userStore.userInfo?.username }}
+              <el-icon><ArrowDown /></el-icon>
+            </span>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item @click="router.push('/orders')">我的订单</el-dropdown-item>
+                <el-dropdown-item @click="router.push('/points-records')">积分明细</el-dropdown-item>
+                <el-dropdown-item @click="router.push('/addresses')">地址管理</el-dropdown-item>
+                <el-dropdown-item divided @click="handleLogout">退出登录</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+          <el-button type="primary" :icon="Plus" @click="openAddDialog">
+            新增地址
+          </el-button>
+        </div>
       </div>
     </header>
 
@@ -141,7 +160,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
-import { ArrowLeft, Plus } from '@element-plus/icons-vue'
+import { ArrowLeft, Plus, User, ArrowDown } from '@element-plus/icons-vue'
 import { useUserStore } from '../stores/user'
 import {
   getAddresses,
@@ -237,11 +256,12 @@ async function handleSubmit() {
 
   submitting.value = true
   try {
+    const submitData = { ...form, isDefault: form.isDefault ? 1 : 0 }
     if (isEdit.value && editingId.value !== null) {
-      await updateAddress(editingId.value, form)
+      await updateAddress(editingId.value, submitData)
       ElMessage.success('地址更新成功')
     } else {
-      await addAddress(form)
+      await addAddress(submitData)
       ElMessage.success('地址添加成功')
     }
     dialogVisible.value = false
@@ -286,28 +306,64 @@ function handleLogout() {
 
 <style scoped>
 .header {
-  background: #fff;
-  border-bottom: 1px solid #ebeef5;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   position: sticky;
   top: 0;
   z-index: 100;
+  box-shadow: 0 2px 12px rgba(102, 126, 234, 0.3);
 }
-
 .header-inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
-  height: 60px;
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo {
+  font-size: 22px;
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.header-right {
   display: flex;
   align-items: center;
   gap: 16px;
 }
-
-.header-title {
-  flex: 1;
-  font-size: 18px;
-  font-weight: 500;
-  color: #303133;
+.header-right .user-info {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: rgba(255,255,255,0.9);
+  font-size: 14px;
+}
+.header-right .user-info:hover {
+  color: #fff;
+}
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.nav-link {
+  color: rgba(255,255,255,0.75);
+  text-decoration: none;
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+.nav-link:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.15);
+}
+.nav-link.router-link-active {
+  color: #fff;
+  font-weight: 600;
+  background: rgba(255,255,255,0.2);
 }
 
 /* 地址列表 */

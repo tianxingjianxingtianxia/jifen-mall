@@ -14,4 +14,6 @@ public interface AuthService {
     AdminLoginResponse adminLogin(AdminLoginRequest request);
 
     LoginResponse getUserInfo(Long userId);
+
+    LoginResponse wxLogin(String code);
 }

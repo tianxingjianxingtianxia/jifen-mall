@@ -57,4 +57,14 @@ public class PointsController {
         PageResult<PointRecordVO> page = pointsService.getRecords(userId, pageNum, pageSize);
         return Result.success(page);
     }
+
+    /**
+     * [测试专用] 充值积分 (仅在dev/ci环境使用)
+     */
+    @PostMapping("/topup")
+    public Result<Void> topup(@RequestParam int points) {
+        Long userId = UserContextUtil.getUserId();
+        pointsService.topup(userId, points);
+        return Result.success();
+    }
 }

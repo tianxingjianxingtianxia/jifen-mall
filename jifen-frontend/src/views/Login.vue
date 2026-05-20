@@ -40,6 +40,8 @@
       <div class="login-footer">
         <span>还没有账号？</span>
         <router-link to="/register">立即注册</router-link>
+        <span class="footer-sep">|</span>
+        <router-link to="/admin/login">管理员登录</router-link>
       </div>
     </div>
   </div>
@@ -133,5 +135,10 @@ async function handleLogin() {
   color: #409eff;
   text-decoration: none;
   margin-left: 4px;
+}
+
+.footer-sep {
+  margin: 0 8px;
+  color: #dcdfe6;
 }
 </style>

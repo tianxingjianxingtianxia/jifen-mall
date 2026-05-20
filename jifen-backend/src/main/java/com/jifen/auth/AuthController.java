@@ -6,6 +6,8 @@ import com.jifen.auth.dto.LoginRequest;
 import com.jifen.auth.dto.LoginResponse;
 import com.jifen.auth.dto.RegisterRequest;
 import com.jifen.common.Result;
+import com.jifen.common.exception.BusinessException;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,6 +44,16 @@ public class AuthController {
     public Result<LoginResponse> userInfo() {
         Long userId = UserContextUtil.getUserId();
         LoginResponse response = authService.getUserInfo(userId);
+        return Result.success(response);
+    }
+
+    @PostMapping("/wx-login")
+    public Result<LoginResponse> wxLogin(@RequestBody Map<String, String> body) {
+        String code = body.get("code");
+        if (code == null || code.isEmpty()) {
+            throw new BusinessException("code 不能为空");
+        }
+        LoginResponse response = authService.wxLogin(code);
         return Result.success(response);
     }
 }
